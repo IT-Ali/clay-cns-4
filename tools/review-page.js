@@ -37,7 +37,9 @@
     const Z = V(0, 0, 1), UP = V(0, 1, 0), neck = P.torso.localToWorld(V(0, 5.4, 0.5));
     return {
       plan: { pos: [1.0, 36.5, 0.01], target: [1.0, 6, 0], up: [0, 0, -1], fov: 28, focus: [1, 9, 0], aperture: 0 },
-      mastR: at(mR, [[Z, 0.8], [HZ, 0.55], [HY, 0.3]], 4.6, mR.clone().addScaledVector(Z, 0.25).addScaledVector(HY, 0.1)),
+      mastR: at(mR, [[Z, 0.6], [HZ, 0.75], [HY, -0.25]], 3.8, mR.clone().addScaledVector(Z, 0.15)),
+      scmL: at(P.torso.localToWorld(V(0.42, 5.9, 0.1)), [[Z, -0.92], [HZ, 0.38]], 4.4, P.torso.localToWorld(V(0.42, 5.9, 0.1)), 0.004),
+      scmR: at(P.torso.localToWorld(V(-0.42, 5.9, 0.1)), [[Z, 0.92], [HZ, 0.38]], 4.4, P.torso.localToWorld(V(-0.42, 5.9, 0.1)), 0.004),
       airR: at(W.canal.R.p, [[Z, 0.88], [HZ, 0.42], [HY, 0.1]], 4.4, W.canal.R.p.clone().addScaledVector(Z, 0.3).addScaledVector(HY, 0.1)),
       fore: at(f, [[HZ, 0.8], [Z, -0.55], [HY, 0.15]], 3.6, f.clone().addScaledVector(HY, -0.1)),
       mouth: at(lips, [[HZ, 1], [HY, -0.2], [Z, -0.05]], 2.0, lips.clone().addScaledVector(HZ, -0.2), 0.0015),
@@ -45,7 +47,8 @@
       jawR: at(W.P.anchor('lips'), [[HZ, 0.75], [Z, 0.6], [HY, 0.0]], 4.2, lips.clone().addScaledVector(Z, 0.35).addScaledVector(HY, -0.2), 0.004),
       cheekR: at(lips, [[HZ, 0.8], [Z, 0.6], [HY, 0.15]], 3.6, lips.clone().addScaledVector(Z, 0.3), 0.003),
       cheekL: at(lips, [[HZ, 0.8], [Z, -0.6], [HY, 0.15]], 3.6, lips.clone().addScaledVector(Z, -0.3), 0.003),
-      neckSide: at(neck.clone().addScaledVector(HY, 0.2), [[Z, 1], [HZ, 0.12]], 4.4, neck.clone().addScaledVector(HY, 0.25).addScaledVector(HZ, 0.3), 0.004),
+      neckSide: at(neck.clone().addScaledVector(HY, 0.35), [[Z, 0.55], [HZ, 0.78], [HY, -0.3]], 5.2, neck.clone().addScaledVector(HY, 0.4).addScaledVector(HZ, 0.15), 0.004),
+      airL: at(W.canal.L.p, [[Z, -0.85], [HZ, 0.45], [HY, 0.15]], 3.8, W.canal.L.p.clone().addScaledVector(Z, -0.28).addScaledVector(HY, 0.1)),
     };
   };
   const PANELS = {
@@ -61,16 +64,8 @@
       title(ctx, 'Plan from above: his RIGHT = toward the camera = bottom here; his LEFT = far side, with the table');
     } },
     'b-mastR': { t: 10.0, cam: 'mastR', draw: (ctx, t, w, h) => { callouts((c) => /Rinne R/.test(c.name), [{ name: 'foot of the stem on the R mastoid', ang: -2.3, r: 150 }])(ctx, t, w, h); title(ctx, 'Rinne, right: the foot of the stem on the mastoid, the hand on the stem behind and below the ear'); } },
-    'b-airR': { t: 12.4, cam: 'airR', draw: (ctx, t, w, h) => {
-      const c = W.canal.R, pr = []; W.fork.group.traverse((m) => { if (m.isMesh && m.parent !== W.fork.group) pr.push(m); });
-      const S = C4.surface(pr, c.p, 1.0), d = C4.dist(c.p, S, 1.0);
-      const [x0, y0] = proj(c.p, w, h), [x1, y1] = proj(d.q, w, h); arrow(ctx, x0, y0, x1, y1, '#1b6b2f');
-      const k = w / 960, e = proj(c.p.clone().addScaledVector(c.out, 0.6), w, h);
-      ctx.save(); ctx.setLineDash([6 * k, 5 * k]); ctx.strokeStyle = '#1b6b2f'; ctx.lineWidth = 1.6 * k; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(e[0], e[1]); ctx.stroke(); ctx.restore();
-      label(ctx, (x0 + x1) / 2 - 150 * k, (y0 + y1) / 2 + 70 * k, 'ear canal opening -> near prong: ' + (Math.abs(d.d) * 10).toFixed(1) + ' cm', { ink: '#1b6b2f', size: 13 });
-      label(ctx, e[0] + 60 * k, e[1] - 50 * k, 'canal axis: both prongs in line with it', { ink: '#1b6b2f', size: 13 });
-      title(ctx, 'Rinne, right: the vibrating prongs about 2 cm from the opening of the ear canal, in line with it');
-    } },
+    'b-airR': { t: 12.4, cam: 'airR', draw: (ctx, t, w, h) => { airDraw(ctx, w, h, 'R'); title(ctx, 'Rinne, right: the vibrating prongs about 2 cm from the opening of the ear canal, in line with it'); } },
+    'b-airL2': { t: 17.0, cam: 'airL', draw: (ctx, t, w, h) => { airDraw(ctx, w, h, 'L'); title(ctx, 'Rinne, left: looking at the ear, the prongs 2 cm from the canal opening, in line with it, the hand clear'); } },
     'b-fore': { t: 22.4, cam: 'fore', draw: (ctx, t, w, h) => { callouts((c) => /Weber/.test(c.name), [{ name: 'foot on the middle of the forehead', ang: -2.6, r: 150 }])(ctx, t, w, h); title(ctx, 'Weber: the foot of the stem on the middle of the forehead'); } },
     'c-rest': { t: 30.6, cam: 'mouth', draw: (ctx, t, w, h) => { title(ctx, "Inside the mouth, open, before 'Ah': soft palate and uvula at rest, in the midline"); midline(ctx, w, h); } },
     'c-risen': { t: 33.5, cam: 'mouth', draw: (ctx, t, w, h) => { title(ctx, "'Ah': the soft palate rises equally on both sides, the uvula stays in the midline"); midline(ctx, w, h); } },
@@ -80,14 +75,23 @@
     'e-out': { t: 79.0, cam: 'tongueOut', draw: (ctx, t, w, h) => { title(ctx, 'Tongue out, from the front: the tip on the midline (nose to chin)'); noseChin(ctx, w, h); } },
     'e-cheekR': { t: 84.6, cam: 'cheekR', draw: (ctx, t, w, h) => { callouts((c) => /Cheek R: pad/.test(c.name), [{ name: 'index pad on the bulge', ang: -0.5, r: 150 }])(ctx, t, w, h); title(ctx, "Tongue in the RIGHT cheek: the examiner's index pad on the bulge"); } },
     'e-cheekL': { t: 87.1, cam: 'cheekL', draw: (ctx, t, w, h) => { callouts((c) => /Cheek L: pad/.test(c.name), [{ name: 'index pad on the bulge', ang: -2.6, r: 150 }])(ctx, t, w, h); title(ctx, "Tongue in the LEFT cheek: the examiner's index pad on the bulge"); } },
-    'f-before': { t: 46.35, cam: 'neckSide', draw: (ctx, t, w, h) => { larynx(ctx, w, h, 0); title(ctx, 'Swallow, side view of the neck: the larynx before the swallow'); } },
-    'f-during': { t: 46.85, cam: 'neckSide', draw: (ctx, t, w, h) => { larynx(ctx, w, h, 1); title(ctx, 'During the swallow: the larynx rises (about 3 cm) and then falls back'); } },
+    'f-before': { t: 46.35, cam: 'neckSide', draw: (ctx, t, w, h) => { larynx(ctx, w, h, 0); title(ctx, 'From his right front, a little low (his left arm holds the glass): the front of the neck, chin to sternal notch, the larynx at rest'); } },
+    'f-during': { t: 46.85, cam: 'neckSide', draw: (ctx, t, w, h) => { larynx(ctx, w, h, 1); title(ctx, 'During the swallow: the larynx rises about 2 cm, then falls back'); } },
   };
   function midline(ctx, w, h) {
     const P = W.P, lips = P.anchor('lips'), HY = V(0, 1, 0).transformDirection(W.head.matrixWorld), k = w / 960;
     const a = proj(lips.clone().addScaledVector(HY, 0.45), w, h), b = proj(lips.clone().addScaledVector(HY, -0.5), w, h);
     ctx.save(); ctx.setLineDash([7 * k, 6 * k]); ctx.strokeStyle = 'rgba(27,107,47,0.9)'; ctx.lineWidth = 1.6 * k; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.restore();
     label(ctx, a[0] + 50 * k, a[1] + 10 * k, 'midline', { ink: '#1b6b2f', size: 13 });
+  }
+  function airDraw(ctx, w, h, side) {
+    const c = W.canal[side], pr = []; W.fork.group.traverse((m) => { if (m.isMesh && m.parent !== W.fork.group) pr.push(m); });
+    const S = C4.surface(pr, c.p, 1.0), d = C4.dist(c.p, S, 1.0), k = w / 960;
+    const [x0, y0] = proj(c.p, w, h), [x1, y1] = proj(d.q, w, h); arrow(ctx, x0, y0, x1, y1, '#1b6b2f');
+    const e = proj(c.p.clone().addScaledVector(c.out, 0.6), w, h);
+    ctx.save(); ctx.setLineDash([6 * k, 5 * k]); ctx.strokeStyle = '#1b6b2f'; ctx.lineWidth = 1.6 * k; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(e[0], e[1]); ctx.stroke(); ctx.restore();
+    label(ctx, x0 + 10 * k, y0 + 70 * k, 'canal opening -> near prong: ' + (Math.abs(d.d) * 10).toFixed(1) + ' cm', { ink: '#1b6b2f', size: 13 });
+    label(ctx, e[0], e[1] - 40 * k, 'canal axis: both prongs in line with it', { ink: '#1b6b2f', size: 13 });
   }
   function noseChin(ctx, w, h) {
     const N = window.NEURO.points(W.P), a = proj(N.noseTip, w, h), b = proj(N.chin, w, h), k = w / 960;
@@ -102,11 +106,17 @@
     label(ctx, x + off, y + 72 * k, (side === 'L' ? 'his LEFT' : 'his RIGHT') + ' sternocleidomastoid', { ink: '#1b6b2f', size: 13 });
   }
   function larynx(ctx, w, h, up) {
-    const P = W.P, k = w / 960, ray = new THREE.Raycaster(), neck = P.torso.children.find((m) => m.name === 'neck');
-    const y = 5.3 + 0.28 * up, o = P.torso.localToWorld(V(0, y, 2)), d = P.torso.localToWorld(V(0, y, 0)).sub(o).normalize();
-    ray.set(o, d); const hit = ray.intersectObject(neck, false)[0]; if (!hit) return;
-    const [x, yy] = proj(hit.point, w, h); arrow(ctx, x + 110 * k, yy + 50 * k, x, yy, '#1b6b2f'); label(ctx, x + 110 * k, yy + 62 * k, up ? 'larynx risen' : 'larynx at rest', { ink: '#1b6b2f' });
+    const p = W.M4.larynx(), k = w / 960; if (!p) return;
+    const [x, y] = proj(p, w, h); arrow(ctx, x - 150 * k, y + 40 * k, x, y, '#1b6b2f'); label(ctx, x - 150 * k, y + 52 * k, up ? 'larynx risen (about 2 cm)' : 'larynx (laryngeal prominence) at rest', { ink: '#1b6b2f' });
   }
+  // before/after pairs: the same camera, two moments, each a 2x crop around a point, side by side
+  const PAIRS = {
+    'd-shrug2': { cam: 'shrug', zoom: 1.1, focus: () => W.P.torso.localToWorld(V(0, 4.8, 0.4)), a: { t: 54.4, label: 'rest: palms on the shoulder tops' }, b: { t: 56.0, label: 'shrugged: shoulders up about 3 cm' }, title: 'Shrug against the hands: both shoulders rise equally under the palms' },
+    'd-scmR': { cam: 'scmL', zoom: 1.3, focus: () => W.P.torso.localToWorld(V(0.42, 5.9, 0.1)), a: { t: 61.0, label: 'head straight' }, b: { t: 63.6, label: 'turning RIGHT: his LEFT SCM stands out' }, title: 'His LEFT sternocleidomastoid, seen from his left side (1.3x): rest vs turning right against the hand' },
+    'd-scmL': { cam: 'scmR', zoom: 1.3, focus: () => W.P.torso.localToWorld(V(-0.42, 5.9, 0.1)), a: { t: 61.0, label: 'head straight' }, b: { t: 67.2, label: 'turning LEFT: his RIGHT SCM stands out' }, title: 'His RIGHT sternocleidomastoid, seen from his right side (1.3x): rest vs turning left against the hand' },
+    'e-bulgeR': { cam: 'cheekR', zoom: 2, hide: true, focus: () => W.M4.bulge('R').p, a: { t: 82.5, label: 'tongue at rest' }, b: { t: 84.6, label: 'tongue in the RIGHT cheek' }, title: "Right cheek (2x, the examiner's hand hidden): the round bulge between the mouth corner and the ear" },
+    'e-bulgeL': { cam: 'cheekL', zoom: 2, hide: true, focus: () => W.M4.bulge('L').p, a: { t: 82.5, label: 'tongue at rest' }, b: { t: 87.1, label: 'tongue in the LEFT cheek' }, title: "Left cheek (2x, the examiner's hand hidden): the round bulge between the mouth corner and the ear" },
+  };
   window.REVIEW = {
     names: Object.keys(PANELS),
     panel(name) {
@@ -114,6 +124,23 @@
       window.CAM_OVERRIDE = C[p.cam] || null; window.REVIEW_OVERLAY = p.draw; return p.t;
     },
     beat() { window.CAM_OVERRIDE = null; window.REVIEW_OVERLAY = null; },
+    async pair(name) {
+      const p = PAIRS[name], C = Object.assign({}, W.CAM, cams()), cv = document.getElementById('c'), Wd = cv.width, Hd = cv.height;
+      window.CAPTIONS = false; window.REVIEW_OVERLAY = null; window.CAM_OVERRIDE = C[p.cam];
+      const out = document.createElement('canvas'); out.width = Wd; out.height = Hd; const o = out.getContext('2d'), k = Wd / 960;
+      for (const [i, st] of [p.a, p.b].entries()) {
+        if (p.hide) { W.EX.R.group.visible = false; W.EX.L.group.visible = false; }
+        window.seek(st.t);
+        const [x, y] = proj(p.focus(), Wd, Hd), cw = Wd / 2 / p.zoom, ch = Hd / p.zoom;
+        o.drawImage(cv, x - cw / 2, y - ch / 2, cw, ch, i * Wd / 2, 0, Wd / 2, Hd);
+        W.EX.R.group.visible = true; W.EX.L.group.visible = true;
+        label(o, i * Wd / 2 + Wd / 4, 26 * k, st.label, { ink: '#26336b', size: 14 });
+      }
+      o.fillStyle = '#f8eedb'; o.fillRect(Wd / 2 - 2 * k, 0, 4 * k, Hd);
+      title(o, p.title); window.CAM_OVERRIDE = null;
+      return out.toDataURL('image/jpeg', 0.9);
+    },
+    pairs: Object.keys(PAIRS),
     report() { return W.CONTACTS.map((c) => ({ name: c.name, gapMM: +(c.gap * 100).toFixed(2), clearance: !!c.clearance })); },
   };
 })();

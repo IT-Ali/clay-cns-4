@@ -29,17 +29,20 @@
   "Beside the LEFT ear (Rinne, air step) the fork is held stem-up, the hand above the ear, so the forearm comes over his head from his right as asked; the prongs are still one behind the other along the canal, 2 cm from it."
  ],
  "open": [
-  "Water (beat 6): his palm sits 1.7 mm off the glass (fingers and thumb 0.5 mm): a flat palm cannot lie fully on a 10 cm round glass.",
-  "Between contacts the hands travel relaxed, but on long moves the fingers still open a little mid-way (seen in the animation, not in these stills); I will tighten that in the animation round.",
-  "The larynx rise (f) is small, as in the kit (a 7 mm bump that rises 3 cm): it reads best in the moving animation."
+  "SCM crops (d-scmR/L): the neck is now filmed from the side of the working muscle, rest vs turning. The sternocleidomastoid standing out is the kit's own effect (shared/patient-neuro.js, about 9 mm at a 60-degree turn; here the turn is 22 degrees against the hand), so the change is subtle. I can make it stronger in this part's own code, as with the larynx, if you want it to read more clearly.",
+  "Shrug: the examiner's right thumb touches 0.07 mm into the skin (every palm and finger is at 0.5 mm). It does not show; I will tidy it in the animation round.",
+  "Water (beat 6): his palm sits 1.7 mm off the glass (fingers and thumb at 0.5 mm): a flat palm cannot lie fully on a 10 cm round glass.",
+  "Between contacts the hands travel relaxed, but on long moves the fingers still open a little mid-way (seen in the animation, not in these stills); I will tighten that in the animation round."
  ],
  "changes": [
-  "Mouth (beats 4, 5, 9; panels c): a new interior in this part's own file (cns4/mouth.js; shared/ untouched): a dark rounded cavity and throat, the soft palate as a pink arch with two rounded pillars each side and a rounded tapering uvula in the middle, rounded teeth following the curve of the jaw, the tongue lying on the floor with its tip behind the lower front teeth. Nothing hangs over the lower lip unless the tongue is put out. On 'Ah' the palate and uvula rise a little, evenly, the uvula stays central, the tongue stays down.",
-  "Tongue out (beat 10, e-out): camera straight from the front at mouth level, his face square to it; the tongue comes straight out over the lower lip, tip on the midline, lips their normal colour. The review panel has a thin midline from the nose tip through the chin.",
-  "Tongue in each cheek (beat 11, e): a round bulge between the corner of the mouth and the ear at the level of the teeth; the examiner's index pad presses on it, the other fingers curled clear of his face. Camera from the front, slightly to that side.",
-  "Rinne (beat 2, b): the fork held by the stem only, between thumb and index near the foot, other fingers loosely curled; the hand behind and below the right ear, the forearm from his right; the ear, the mastoid and the fork visible (no cutaway). Air step: the hand below the fork, the ear clear. Weber (beat 3): the foot in the middle of the forehead (halfway between hairline and eyebrows), the hand on the stem the same way, to his right above his eyes.",
-  "Shrug (beat 7, d-shrug): the forearms come from his right side and from in front of him; palms flat on the tops of both shoulders, fingers together pointing back over the shoulders; camera from the front.",
-  "Head turn (beat 8, d-jaw, d-jawL): a natural hand, palm flat against the side of the chin and jaw, fingers together slightly curved along the jaw, thumb relaxed, wrist in line; both sides shown with the working sternocleidomastoid labelled; camera from the front, neck in frame.",
-  "Cough (beat 5): mouth slightly open, the tongue inside."
+  "Cough (beat 5): the mouth only slightly open, the tongue stays inside (lower and further back whenever the mouth is only a little open).",
+  "Mouth interior (beats 4, 9; c): each side now has two curved arches, the palatoglossal in front and the palatopharyngeal behind, flowing out of the soft palate edge down to the side of the tongue; even, continuous rows of teeth along the jaw curve (each tooth turned along the curve, neighbours touching); no open shell edges in the cavity.",
+  "Tongue out (beat 10, KEY): about 2-3 cm beyond the lower lip, a rounded tip, a slight midline groove, the lower lip under it; e-out keeps the front camera and the nose-to-chin midline.",
+  "Tongue in cheek (beat 11; e-cheekR/L; new e-bulgeR/L): a round bulge about 2 cm across, clearly raised, between the mouth corner and the ear at mouth level (the kit's bulge is replaced); the index pad presses on its middle, the other fingers curled with the thumb over them. Before/after 2x crops with the same camera.",
+  "Swallow (f): the larynx is this part's own subtle prominence on the front of the neck, rising about 2 cm and falling back in each swallow (shown only in this beat, so the home shot is unchanged); the arrows sit on the real point. The camera is from his RIGHT front, a little low: from his left front his raised left arm and the glass cover the neck.",
+  "Shrug (beat 7; d-shrug; new d-shrug2): both palms on the tops of the shoulders (the trapezius ridge between the neck and the acromion), fingers together pointing back, pushing toward his feet; rest vs shrugged pair with the same camera.",
+  "Rinne (beat 2; b-mastR; b-airR; new b-airL2): the stem held with thumb and index only, the other fingers curled away from the ear, nothing within 8 mm of the ear; b-mastR from in front of and a little below the ear (from behind, the pillow and the hand block it); b-airL2 looks at the left ear with the prongs 2 cm from the canal.",
+  "'Ah' (beat 4): the torch is small and comes from in front and below; the glove stays out of the frame.",
+  "SCM (new d-scmR/L): neck crops, rest vs turning, each from the side of the working muscle."
  ]
 }

@@ -179,7 +179,7 @@
       const POSE = {
         relaxed: { all: [0.22, 0.3, 0.18], spread: 0.3, thumb: [0.15, 0, 0.12, 0.08] },
         flat: { all: [0.04, 0.06, 0.03], spread: 0.25, thumb: [0.1, 0, 0.06, 0.04] },
-        pinch: { curl: { index: [0.5, 0.75, 0.45], middle: [0.8, 1.0, 0.6], ring: [0.88, 1.05, 0.62], little: [0.95, 1.1, 0.65] }, spread: 0.04, thumb: [0.75, 0.55, 0.25, 0.15] },
+        pinch: { curl: { index: [0.5, 0.75, 0.45], middle: [1.35, 1.55, 0.95], ring: [1.4, 1.6, 1.0], little: [1.45, 1.6, 1.0] }, spread: 0.04, thumb: [0.75, 0.55, 0.25, 0.15] },
         point: { curl: { index: [0.08, 0.12, 0.08], middle: [1.45, 1.6, 1.0], ring: [1.5, 1.6, 1.0], little: [1.5, 1.6, 1.0] }, spread: 0.1, thumb: [0.85, 0.6, 0.5, 0.4] },
       };
       const clonePose = (p) => JSON.parse(JSON.stringify(p));
@@ -287,9 +287,10 @@
         const hand = handOf('R'), hv = sampleOf(C4.parts(hand, 'hand').concat(C4.parts(hand, 'fingers'), C4.parts(hand, 'thumb')), 7), av = sampleOf(armMeshes(), 11);
         const S0 = C4.surface([cranium].concat(ears, pillowMs, [P.torsoMesh]), at, 2.2);
         let gap = C4.RMAX; for (const v of av) gap = Math.min(gap, C4.dist(v, S0, gap > 0 ? gap + 1e-6 : C4.RMAX).d);
+        const SE = C4.surface(ears, at, 2.2); let egap = C4.RMAX; for (const v of hv) egap = Math.min(egap, C4.dist(v, SE, egap > 0 ? egap + 1e-6 : C4.RMAX).d);
         let fgap = C4.RMAX; for (const v of sampleOf(forkProngs(), 5)) fgap = Math.min(fgap, C4.dist(v, S0, fgap > 0 ? fgap + 1e-6 : C4.RMAX).d);
         const c = V(0, 0, 0); hv.forEach((v) => c.add(v)); c.multiplyScalar(1 / hv.length);
-        return wantFn({ c, hv, gap, fgap });
+        return wantFn({ c, hv, gap, fgap }) + 30 * Math.max(0, 0.08 - egap);   // nothing within 8 mm of the ear
       };
       const searchBone = (pt, side, isFore) => {
         const tilts = isFore ? [V(0, 0, 0), HY.clone().multiplyScalar(0.3), HX.clone().multiplyScalar(-0.3), HY.clone().multiplyScalar(0.3).addScaledVector(HX, -0.3)]
@@ -370,7 +371,7 @@
       ST.fork.pocket = propForHand(FORK_GRIP, ST.R.pocket);
       ST.torch.pocket = propForHand(TORCH_GRIP, ST.R.pocket);
 
-      const BACK = { mastR: V(0.55, -0.75, 0.4), mastL: V(-0.25, 0.55, 1), fore: V(0.3, -0.45, 1), air: V(0.75, -0.65, 0.2), torch: V(0.2, -0.7, 0.8) };
+      const BACK = { mastR: V(0.55, -0.75, 0.4), mastL: V(-0.25, 0.55, 1), fore: V(0.3, -0.45, 1), air: V(0.75, -0.65, 0.2), torch: V(0.45, -0.85, 0.3) };
       const withBack = (st, b) => Object.assign({}, st, { back: b.clone().normalize() });
       const forkHand = (pp, b) => withBack(handForProp(FORK_GRIP, pp), b);
       const torchHand = (pp, b) => withBack(handForProp(TORCH_GRIP, pp), b);
@@ -392,8 +393,8 @@
       const lips0 = P.anchor('lips');
       const mouthBack = lips0.clone().addScaledVector(HZ, -0.38).addScaledVector(HY, 0.03);
       const torchAt = (d, down, side) => { const lens = lips0.clone().addScaledVector(HZ, d).addScaledVector(HY, -down).add(V(0, 0, side)); const x = mouthBack.clone().sub(lens).normalize(); return propPose(torch, 'lens', lens, x, HY.clone()); };
-      ST.torch.ah = torchAt(0.85, 0.55, 0.62);
-      ST.torch.rest9 = torchAt(0.8, 0.5, 0.6);
+      ST.torch.ah = torchAt(0.95, 0.85, 0.3);
+      ST.torch.rest9 = torchAt(0.95, 0.8, 0.3);
       ST.R.torchAh = torchHand(ST.torch.ah, BACK.torch);
       ST.R.torch9 = torchHand(ST.torch.rest9, BACK.torch);
       const skinAll = (at, r) => { const ms = []; P.group.traverse((m) => { if (m.isMesh && m.visible) ms.push(m); }); return C4.surface(ms, at, r || 0.8); };
@@ -420,7 +421,13 @@
           const w1 = hand.group.position.clone();
           C4.settle((d) => { hand.group.position.copy(w1).addScaledVector(n, d); hand.group.updateMatrixWorld(true); }, () => C4.gap(part, S0).gap);
         }
-        if (contact === 'palm') { for (const f of ['index', 'middle', 'ring', 'little']) C4.curlTo(hand, pose, f, S0, { lo: -0.35, hi: 2.4 }); if (lo.thumb !== false) C4.thumbTo(hand, pose, S0, { lo: -0.6, hi: 1.0 }); }
+        if (contact === 'palm') {
+          const fingers = () => { for (const f of ['index', 'middle', 'ring', 'little']) C4.curlTo(hand, pose, f, S0, { lo: -0.35, hi: 2.9, ratio: [0.5, 1, 0.8] }); };
+          const palmDown = () => { const w = hand.group.position.clone(); C4.settle((d) => { hand.group.position.copy(w).addScaledVector(n, d); hand.group.updateMatrixWorld(true); }, () => C4.gap(C4.parts(hand, 'palm'), S0).gap); };
+          // a few rounds: fingers onto the skin, the thumb beside them, the palm itself back down to 0.5 mm
+          for (let k = 0; k < 3; k++) { fingers(); if (lo.thumb !== false) C4.thumbTo(hand, pose, S0, { lo: -0.9, hi: 1.0 }); palmDown(); }
+          fingers();
+        }
         hand.pose(pose); hand.group.updateMatrixWorld(true);
         return { st: { wrist: hand.group.position.clone(), quat, pose, back: back.clone().normalize() }, S0 };
       };
@@ -428,16 +435,16 @@
       const shrugHands = (u) => {
         P.setShrug(u);
         const out = {};
-        for (const [hs, x, b] of [['R', -1.15, V(0.55, 0.3, 1)], ['L', 1.15, V(0.8, 0.4, 0.55)]]) {
+        for (const [hs, x, b] of [['R', -1.05, V(0.55, 0.3, 1)], ['L', 1.05, V(0.8, 0.4, 0.55)]]) {
           let r;
-          if (u === 0) { const top = shoulderTop(x, 0.5); r = layHand(hs, 'palm', top.p, top.n, tFrame().front.negate().add(V(0, 0, hs === 'R' ? 0.25 : -0.25)), shPose, trunkS, b); }
+          if (true) { const top = shoulderTop(x, 0.42); r = layHand(hs, 'palm', top.p, top.n, tFrame().front.negate().add(V(0, 0, hs === 'R' ? -0.15 : 0.15)), shPose, trunkS, b); }
           else {
             // shrugged: the same hand carried up with his shoulder, settled again onto the raised skin
             const s0 = ST.shrug0[hs], hand = handOf(hs), pose = clonePose(s0.pose), upT = tFrame().up, nrm = V(0, 1, 0).applyQuaternion(s0.quat);
             const at = s0.wrist.clone().addScaledVector(upT, 0.3), S0 = trunkS(at, 2.2), part = C4.parts(hand, 'palm');
             hand.pose(pose); hand.group.quaternion.copy(s0.quat); hand.group.position.copy(at); hand.group.updateMatrixWorld(true);
             C4.settle((d) => { hand.group.position.copy(at).addScaledVector(nrm, d); hand.group.updateMatrixWorld(true); }, () => C4.gap(part, S0).gap);
-            for (const f of ['index', 'middle', 'ring', 'little']) C4.curlTo(hand, pose, f, S0, { lo: -0.35, hi: 2.4 });
+            for (const f of ['index', 'middle', 'ring', 'little']) C4.curlTo(hand, pose, f, S0, { lo: -0.35, hi: 2.9, ratio: [0.5, 1, 0.8] });
             C4.thumbTo(hand, pose, S0, { lo: -0.6, hi: 1.0 });
             r = { st: { wrist: hand.group.position.clone(), quat: s0.quat.clone(), pose, back: s0.back.clone() }, S0 };
           }
@@ -472,7 +479,7 @@
         return { p, n, bulge: bd };
       };
       const cheekHand = (hs, side) => {
-        const b = bulgeAt(side);
+        M4.face(side === 'R' ? { cheekR: 1 } : { cheekL: 1 }); head.updateMatrixWorld(true); const b = M4.bulge(side);
         const r = layHand(hs, 'indexPad', b.p, b.n, HZ.clone().multiplyScalar(0.8).add(V(0, 0, side === 'R' ? -0.6 : 0.6)).addScaledVector(HY, 0.15), POSE.point, (a, rr) => C4.surface([cranium], a, rr), hs === 'R' ? V(-0.2, -0.7, 1) : V(0.5, -0.8, 0.5), { dip: 0.5 });
         applyEx(hs, r.st);
         record(`Cheek ${side}: pad of the examiner's index finger on the bulge`, C4.parts(handOf(hs), 'indexTip'), r.S0, { group: 'e', side });
@@ -619,11 +626,14 @@
         const a4 = seg(tp, T.open) * (1 - seg(tp, T.close)), a9 = seg(tp, T.open9) * (1 - seg(tp, T.close9));
         if (a4 > 0.02) { f.ah = 0.02 + 0.98 * seg(tp, T.ah) * (1 - seg(tp, T.close)); f.jaw = 1.6 * a4; }
         if (a9 > 0.02) { f.ah = 0.02; f.jaw = 1.6 * a9; }
-        if (inWin(tp, T.cough)) f.cough = bump(tp, T.cough);
+        if (inWin(tp, T.cough)) f.cough = 0.6 * bump(tp, T.cough);        // a small jolt, the mouth only a little open
+        // the larynx (cns4/mouth.js): shown through the swallow beat, rising and falling back in each swallow
+        f.larynx = seg(tp, [43.2, 44.2]) * (1 - seg(tp, [49.6, 50.6]));
         if (inWin(tp, T.swallow1)) f.swallow = seg(tp, T.swallow1, (u) => u);
         if (inWin(tp, T.swallow2)) f.swallow = seg(tp, T.swallow2, (u) => u);
+        if (!f.larynx) delete f.larynx;
         if (inWin(tp, [T.sip1[0], T.sip1[1]]) || inWin(tp, [T.sip2[0], T.sip2[1]])) f.round = 0.5;
-        const tOut = seg(tp, T.tongueOut) * (1 - seg(tp, T.tongueIn)); if (tOut > 0.01) { f.tongue = tOut; f.jaw = Math.max(f.jaw || 0, 0.55 * tOut); }
+        const tOut = seg(tp, T.tongueOut) * (1 - seg(tp, T.tongueIn)); if (tOut > 0.01) { f.tongue = tOut; f.jaw = Math.max(f.jaw || 0, 0.85 * tOut); }
         const cR = seg(tp, T.cheekR) * (1 - seg(tp, T.offR)), cL = seg(tp, T.cheekL) * (1 - seg(tp, T.offL));
         if (cR > 0.01) f.cheekR = cR; if (cL > 0.01) f.cheekL = cL;
         return f;
@@ -680,7 +690,7 @@
         if ((f.jaw || 0) > 0.3 && (f.ah || f.tongue)) { o.fill = 1.6; o.fillPos = lips0.clone().addScaledVector(HZ, 1.1).addScaledVector(HY, -0.2).toArray(); }
         return o;
       };
-      Object.assign(root.CNS4_WORLD, { CAM, CAM_KEYS, camAt, exR, exL, armL, glassAtT, faceAt, turnAt, shrugAt, holds, ringAt, propForHand });
+      Object.assign(root.CNS4_WORLD, { M4, CAM, CAM_KEYS, camAt, exR, exL, armL, glassAtT, faceAt, turnAt, shrugAt, holds, ringAt, propForHand });
 
       // ------------------------------------------------------------ the frame for time t
       const homeLock = (t) => t <= HOME_HOLD + 1e-6 || t >= D - HOME_HOLD - 1e-6;
@@ -695,7 +705,7 @@
         const tp = poseT(t), still = homeLock(t);
         // patient: shrug, head, (legs at rest), arms, face, breathing (README order)
         P.setShrug(shrugAt(tp));
-        P.setHead({ turn: turnAt(tp) });
+        M4.head({ turn: turnAt(tp) });
         HOME.applyArm(P, 'R', ST.arm.rest.R);
         HOME.applyArm(P, 'L', armL(tp));
         M4.face(still ? {} : faceAt(tp));

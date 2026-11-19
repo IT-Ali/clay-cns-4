@@ -4,7 +4,12 @@
 - Round 1 (storyboard): published at https://claude.ai/artifact/1bsGnak93vFkfbNNcSLwu1 (same URL is republished each round).
 - Round 2 (storyboard review 1 fixes): mouth interior (cns4/mouth.js), tongue-out front camera + midline panel, cheek
   bulge + finger, Rinne/Weber stem grip (searched hand placement), shrug from his right/front with fingers back,
-  natural jaw hands both sides (+ panel d-jawL), cough mouth. Storyboard re-rendered; waiting for the user's review.
+  natural jaw hands both sides (+ panel d-jawL), cough mouth.
+- Round 3 (storyboard review 2 fixes): cough mouth slightly open, tongue inside; curved palatoglossal and
+  palatopharyngeal arches; even teeth rows; tongue out 2-3 cm; round 2 cm cheek bulge (replaces the kit's) + 2x
+  before/after crops; own larynx prominence in the swallow beat; shrug palms on the trapezius ridge + rest/shrug pair;
+  Rinne thumb-and-index grip, fingers away from the ear (searched, ear clearance 8 mm) + b-airL2; small torch for 'Ah';
+  SCM crops. All 34 panels re-rendered; waiting for the user's review (story_vs_anim and previews only after approval).
 - The whole animation already runs end to end in `cns4/cns4-style.js` (it is the storyboard's scene: cameras CAM,
   states ST, contacts CONTACTS). After approval: polish beats, then story_vs_anim.png, previews, final checks.
 
@@ -39,7 +44,14 @@
   rounded teeth rows on the jaw curve (upper fixed; lower + floor + tongue in a group turned about the kit's jaw axis
   JP = (0, -0.12, -0.08), JK = 0.22 rad per unit of jaw), the tongue (loft, midline groove) resting on the floor with its
   tip behind the lower incisors, sliding out over the lower teeth and lip with `tongue` 0..1.
-- Tongue in cheek: subtracts the kit's bulge (its formula, on the rest shape) and adds a round one centred at
-  head-local |x| 0.45, y -0.53 (between the mouth corner and the ear, at the teeth), recomputed only when the face changes.
+- Tongue in cheek: subtracts the kit's bulge (its formula, on the rest shape) and adds a round one (about 2 cm) centred at
+  head-local |x| 0.42, y -0.49 (between the mouth corner and the ear, at mouth level), recomputed only when the face
+  changes; `M4.bulge(side)` gives its middle (the finger pad goes there).
+- Arches: front (palatoglossal) and back (palatopharyngeal) arch tubes along one smooth curve each, from the soft palate
+  edge down to the side of the tongue; the soft palate membrane fills to the front arch. Teeth: 7 per side per row,
+  equal arc-length steps along the jaw curve, each turned to the curve.
+- Larynx: `M4.head(h)` replaces `P.setHead(h)`; with `f.larynx` (0..1) a subtle prominence (4.5 mm) on the front of
+  the neck at torso y 5.85, rising 2 cm with `f.swallow` (the kit's own swallow bump is then switched off). Only in the
+  swallow beat, so the home shot is the kit's exactly. `M4.larynx()` gives its world point.
 - Kit constants it copies: MOUTH_Y = -0.5, mouthY(x) = -0.5 + 0.22 x^2, the visemes' jaw values, the jaw rules of setFace.
 - Probe for quick looks: `index.html?probe=mouth` (cns4/probe-mouth.js) and `node tools/probe-shots.mjs mouth <dir> 640 360 2 '<json>'`.
