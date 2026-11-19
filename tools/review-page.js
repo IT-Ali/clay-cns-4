@@ -37,8 +37,8 @@
     const Z = V(0, 0, 1), UP = V(0, 1, 0), neck = P.torso.localToWorld(V(0, 5.4, 0.5));
     return {
       plan: { pos: [1.0, 36.5, 0.01], target: [1.0, 6, 0], up: [0, 0, -1], fov: 28, focus: [1, 9, 0], aperture: 0 },
-      mastR: at(mR, [[Z, 0.72], [HZ, 0.6], [HY, 0.3]], 3.8, mR.clone().addScaledVector(Z, 0.2).addScaledVector(HY, 0.1)),
-      airR: at(W.canal.R.p, [[HZ, 0.9], [Z, 0.45], [HY, 0.25]], 3.8, W.canal.R.p.clone().addScaledVector(Z, 0.25).addScaledVector(HY, 0.2)),
+      mastR: at(mR, [[Z, 0.8], [HZ, 0.55], [HY, 0.3]], 4.6, mR.clone().addScaledVector(Z, 0.25).addScaledVector(HY, 0.1)),
+      airR: at(W.canal.R.p, [[Z, 0.88], [HZ, 0.42], [HY, 0.1]], 4.4, W.canal.R.p.clone().addScaledVector(Z, 0.3).addScaledVector(HY, 0.1)),
       fore: at(f, [[HZ, 0.8], [Z, -0.55], [HY, 0.15]], 3.6, f.clone().addScaledVector(HY, -0.1)),
       mouth: at(lips, [[HZ, 1], [HY, -0.2], [Z, -0.05]], 2.0, lips.clone().addScaledVector(HZ, -0.2), 0.0015),
       shrug: at(neck, [[HZ, 0.5], [UP, 0.85], [Z, 0.05]], 8.5, neck, 0.006),
@@ -46,7 +46,6 @@
       cheekR: at(lips, [[HZ, 0.8], [Z, 0.6], [HY, 0.15]], 3.6, lips.clone().addScaledVector(Z, 0.3), 0.003),
       cheekL: at(lips, [[HZ, 0.8], [Z, -0.6], [HY, 0.15]], 3.6, lips.clone().addScaledVector(Z, -0.3), 0.003),
       neckSide: at(neck.clone().addScaledVector(HY, 0.2), [[Z, 1], [HZ, 0.12]], 4.4, neck.clone().addScaledVector(HY, 0.25).addScaledVector(HZ, 0.3), 0.004),
-      tongueOut: at(lips, [[HZ, 1], [HY, 0.08]], 2.6, lips.clone().addScaledVector(HY, -0.1), 0.002),
     };
   };
   const PANELS = {
@@ -61,7 +60,7 @@
       [x, y] = p(W.EX.R.hand.group.position); label(ctx, x, y + 40 * k, "examiner's gloved hands: on HIS RIGHT side", { ink: '#26336b' });
       title(ctx, 'Plan from above: his RIGHT = toward the camera = bottom here; his LEFT = far side, with the table');
     } },
-    'b-mastR': { t: 10.0, cam: 'mastR', hide: 'R', draw: (ctx, t, w, h) => { callouts((c) => /Rinne R/.test(c.name), [{ name: 'foot of the stem on the R mastoid', ang: -0.6, r: 150 }])(ctx, t, w, h); title(ctx, "Rinne, right: the foot of the stem on the mastoid (cutaway: the examiner's hand hidden)"); } },
+    'b-mastR': { t: 10.0, cam: 'mastR', draw: (ctx, t, w, h) => { callouts((c) => /Rinne R/.test(c.name), [{ name: 'foot of the stem on the R mastoid', ang: -2.3, r: 150 }])(ctx, t, w, h); title(ctx, 'Rinne, right: the foot of the stem on the mastoid, the hand on the stem behind and below the ear'); } },
     'b-airR': { t: 12.4, cam: 'airR', draw: (ctx, t, w, h) => {
       const c = W.canal.R, pr = []; W.fork.group.traverse((m) => { if (m.isMesh && m.parent !== W.fork.group) pr.push(m); });
       const S = C4.surface(pr, c.p, 1.0), d = C4.dist(c.p, S, 1.0);
@@ -76,8 +75,9 @@
     'c-rest': { t: 30.6, cam: 'mouth', draw: (ctx, t, w, h) => { title(ctx, "Inside the mouth, open, before 'Ah': soft palate and uvula at rest, in the midline"); midline(ctx, w, h); } },
     'c-risen': { t: 33.5, cam: 'mouth', draw: (ctx, t, w, h) => { title(ctx, "'Ah': the soft palate rises equally on both sides, the uvula stays in the midline"); midline(ctx, w, h); } },
     'd-shrug': { t: 56.0, cam: 'shrug', draw: (ctx, t, w, h) => { callouts((c) => /Shrug up/.test(c.name) && /palm|index|little/.test(c.name), [])(ctx, t, w, h); title(ctx, 'Shrug: both palms flat on the tops of the shoulders (gaps: palm and fingers to the skin)'); } },
-    'd-jaw': { t: 63.6, cam: 'jawR', draw: (ctx, t, w, h) => { callouts((c) => /Head turn: examiner R/.test(c.name), [])(ctx, t, w, h); title(ctx, 'Head turn to the right: the palm against the right side of the chin and jaw'); } },
-    'e-out': { t: 79.0, cam: 'tongueOut', draw: (ctx, t, w, h) => { title(ctx, 'Tongue out: straight, in the midline'); midline(ctx, w, h); } },
+    'd-jaw': { t: 63.6, cam: 'turn', draw: (ctx, t, w, h) => { callouts((c) => /Head turn: examiner R/.test(c.name), [])(ctx, t, w, h); scm(ctx, w, h, 'L'); title(ctx, 'Turning RIGHT against the palm on the right of the chin: the LEFT sternocleidomastoid stands out'); } },
+    'd-jawL': { t: 67.2, cam: 'turn', draw: (ctx, t, w, h) => { callouts((c) => /Head turn: examiner L/.test(c.name), [])(ctx, t, w, h); scm(ctx, w, h, 'R'); title(ctx, 'Turning LEFT against the palm on the left of the chin: the RIGHT sternocleidomastoid stands out'); } },
+    'e-out': { t: 79.0, cam: 'tongueOut', draw: (ctx, t, w, h) => { title(ctx, 'Tongue out, from the front: the tip on the midline (nose to chin)'); noseChin(ctx, w, h); } },
     'e-cheekR': { t: 84.6, cam: 'cheekR', draw: (ctx, t, w, h) => { callouts((c) => /Cheek R: pad/.test(c.name), [{ name: 'index pad on the bulge', ang: -0.5, r: 150 }])(ctx, t, w, h); title(ctx, "Tongue in the RIGHT cheek: the examiner's index pad on the bulge"); } },
     'e-cheekL': { t: 87.1, cam: 'cheekL', draw: (ctx, t, w, h) => { callouts((c) => /Cheek L: pad/.test(c.name), [{ name: 'index pad on the bulge', ang: -2.6, r: 150 }])(ctx, t, w, h); title(ctx, "Tongue in the LEFT cheek: the examiner's index pad on the bulge"); } },
     'f-before': { t: 46.35, cam: 'neckSide', draw: (ctx, t, w, h) => { larynx(ctx, w, h, 0); title(ctx, 'Swallow, side view of the neck: the larynx before the swallow'); } },
@@ -89,6 +89,18 @@
     ctx.save(); ctx.setLineDash([7 * k, 6 * k]); ctx.strokeStyle = 'rgba(27,107,47,0.9)'; ctx.lineWidth = 1.6 * k; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.restore();
     label(ctx, a[0] + 50 * k, a[1] + 10 * k, 'midline', { ink: '#1b6b2f', size: 13 });
   }
+  function noseChin(ctx, w, h) {
+    const N = window.NEURO.points(W.P), a = proj(N.noseTip, w, h), b = proj(N.chin, w, h), k = w / 960;
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
+    ctx.save(); ctx.strokeStyle = 'rgba(27,107,47,0.95)'; ctx.lineWidth = 1.3 * k; ctx.beginPath(); ctx.moveTo(a[0] - ux * 60 * k, a[1] - uy * 60 * k); ctx.lineTo(b[0] + ux * 40 * k, b[1] + uy * 40 * k); ctx.stroke(); ctx.restore();
+    label(ctx, a[0] + 90 * k, a[1] - 30 * k, 'midline: nose tip to chin', { ink: '#1b6b2f', size: 13 });
+  }
+  function scm(ctx, w, h, side) {
+    const P = W.P, k = w / 960, sx = side === 'L' ? 1 : -1, off = (side === 'L' ? -130 : 130) * k;
+    const p = P.torso.localToWorld(V(sx * 0.3, 5.75, 0.45)), [x, y] = proj(p, w, h);
+    arrow(ctx, x + off, y + 60 * k, x, y, '#1b6b2f');
+    label(ctx, x + off, y + 72 * k, (side === 'L' ? 'his LEFT' : 'his RIGHT') + ' sternocleidomastoid', { ink: '#1b6b2f', size: 13 });
+  }
   function larynx(ctx, w, h, up) {
     const P = W.P, k = w / 960, ray = new THREE.Raycaster(), neck = P.torso.children.find((m) => m.name === 'neck');
     const y = 5.3 + 0.28 * up, o = P.torso.localToWorld(V(0, y, 2)), d = P.torso.localToWorld(V(0, y, 0)).sub(o).normalize();
@@ -98,10 +110,10 @@
   window.REVIEW = {
     names: Object.keys(PANELS),
     panel(name) {
-      const p = PANELS[name], C = cams();
-      window.CAM_OVERRIDE = C[p.cam] || null; window.REVIEW_OVERLAY = p.draw; W.EX.R.group.visible = p.hide !== 'R'; return p.t;
+      const p = PANELS[name], C = Object.assign({}, W.CAM, cams());
+      window.CAM_OVERRIDE = C[p.cam] || null; window.REVIEW_OVERLAY = p.draw; return p.t;
     },
-    beat() { window.CAM_OVERRIDE = null; window.REVIEW_OVERLAY = null; W.EX.R.group.visible = true; },
+    beat() { window.CAM_OVERRIDE = null; window.REVIEW_OVERLAY = null; },
     report() { return W.CONTACTS.map((c) => ({ name: c.name, gapMM: +(c.gap * 100).toFixed(2), clearance: !!c.clearance })); },
   };
 })();

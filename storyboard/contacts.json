@@ -1,12 +1,12 @@
 [
  {
   "name": "Rinne R: foot of the stem on the right mastoid",
-  "gapMM": 0.49,
+  "gapMM": 0.5,
   "clearance": false
  },
  {
   "name": "Rinne L: foot of the stem on the left mastoid",
-  "gapMM": 0.5,
+  "gapMM": 0.49,
   "clearance": false
  },
  {
@@ -86,7 +86,7 @@
  },
  {
   "name": "Shrug up: examiner R palm on his right shoulder",
-  "gapMM": 0.51,
+  "gapMM": 0.48,
   "clearance": false
  },
  {
@@ -116,7 +116,7 @@
  },
  {
   "name": "Shrug up: examiner L palm on his left shoulder",
-  "gapMM": 0.51,
+  "gapMM": 0.48,
   "clearance": false
  },
  {
@@ -201,17 +201,17 @@
  },
  {
   "name": "Cheek R: the other fingers clear of his face (clearance)",
-  "gapMM": 0.25,
+  "gapMM": 30,
   "clearance": true
  },
  {
   "name": "Cheek L: pad of the examiner's index finger on the bulge",
-  "gapMM": 0.5,
+  "gapMM": 0.52,
   "clearance": false
  },
  {
   "name": "Cheek L: the other fingers clear of his face (clearance)",
-  "gapMM": 0.35,
+  "gapMM": 30,
   "clearance": true
  },
  {

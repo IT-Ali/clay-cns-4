@@ -61,6 +61,7 @@ ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 90ch; }
   <h1>Cranial nerves VIII to XII: storyboard</h1>
   <p>Twelve beats, 92 s. Every still is rendered with the STAGE kit from the real scene (shared v5 patient, set and hands, the same cameras and the same solved contact poses the animation uses), at ${samples} samples, ${size[0]}×${size[1]}, the captioned version. Holds (still, no caption, for the speech added later) are listed under each beat.</p>
 </header>
+${notes.changes && notes.changes.length ? `<section><h2>Changed in this round (your review 1)</h2><ul>${notes.changes.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></section>` : ''}
 <section>
   <h2>The beats</h2>
   <div class="grid">

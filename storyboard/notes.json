@@ -1,6 +1,7 @@
 {
  "checks": [
   "Contacts: every examiner contact (fork foot on both mastoids and the forehead, the strike on the left glove, both palms and every finger and thumb on the shoulders, shrugged and not, the palms on the jaw, the index pads on each cheek bulge) and his hand on the glass and the rim on his lip are solved on the real meshes to 0.5 mm; the table below lists every one. Nothing sinks in.",
+  "Hand rules, round 2: every forearm comes from his right side (the shrug and the head turn from his right and in front of him; the left-ear Rinne over the top of his head). The fork is held by its stem only, between thumb and index near the foot, the other fingers loosely curled; for Rinne the hand is behind and below (right ear) or behind and above (left ear) the ear, never in front of it; for Weber it is to his right, above his eyes.",
   "Hand rules: fingers together in every contact pose (the shrug and jaw palms lie flat on the skin, each finger bent onto it), no V of two fingers, no hand on its edge except the palm against the side of the jaw that the step asks for. The fork is held by its stem only (a pen grip 3 cm from the foot), never by the prongs.",
   "His RIGHT and LEFT: checked in the plan panel (a). His right side, the examiner and the camera side are the same; the table and the glass are on his left. The left ear, left jaw and left cheek are on the far side in every shot.",
   "No text anywhere in the scene: only the caption plaque (off in the review panels, which carry review labels only).",
@@ -15,20 +16,30 @@
   "The 512 Hz fork and the pen torch come into frame in the examiner's right hand from his pocket (off frame) and go back there, so the home shot stays identical. The fork is struck on the heel of the left glove, held palm up in the air at his right side, and held by its stem only (a pen grip 3 cm from the foot).",
   "The left ear is tested after a second strike (the first has died away). The hand reaches the left mastoid over the top of his head, never in front of his face.",
   "His answers ('gone', 'yes, I hear it', 'in the middle', a normal sentence after the sips) are silent visemes only. For Weber he says it is in the middle; he does not point.",
-  "No tongue depressor: on 'Ah' the tongue lies low enough on the floor of the mouth for the palate and the uvula to be seen.",
+  "No tongue depressor: the new mouth interior shows the palate and the uvula over the tongue lying on the floor of the mouth.",
   "The water: the bedside table is on his LEFT, about 1.2 m from the examiner's hands, which no arm reaches. So HE takes the glass with his LEFT hand, drinks two sips and puts it back. This changes who holds the glass (not the clinical step); tell me if you want the examiner to bring it instead.",
   "His left jaw (head turn to the left) and his left cheek are touched by the examiner's LEFT hand, its forearm crossing from his right side below his chin.",
   "Head turning against the hand: 22 degrees each way. The shrug: 3 cm (the kit's value). The tongue out: about 1.2 cm past the lips (the kit's value).",
   "Breathing is exactly 14 a minute: 21 breaths between the end of the first second and the start of the last, so it starts and ends at the home breath.",
   "Sound: only the listed real events. The fork's 512 Hz pure tone starts at each strike and dies away with the same decay as the prongs' blur (time constant 1.6 s, audible for about 5 s). The strike itself, the cough and the swallows are silent (speech and these are added later).",
   "The film grain changes every frame, so to make the last frame identical to the first, the final 1 s hold plays the first 1 s hold backwards (the scene is the same still home shot).",
-  "All captions sit at the top of the frame (the hands come in from the bottom and the sides)."
+  "All captions sit at the top of the frame (the hands come in from the bottom and the sides).",
+  "The inside of the mouth is this part's own model (cns4/mouth.js), shown in place of the kit's pieces, which stay untouched in shared/ but are hidden. The tongue-in-cheek bulge is replaced in the same file: the kit's bulge is taken back out and a round one put in its place, between the corner of the mouth and the ear at the level of the teeth.",
+  "The middle of the forehead for Weber is found on his skin halfway between the hairline and the eyebrows (the kit's 'forehead' landmark sits at the hairline).",
+  "Beside the LEFT ear (Rinne, air step) the fork is held stem-up, the hand above the ear, so the forearm comes over his head from his right as asked; the prongs are still one behind the other along the canal, 2 cm from it."
  ],
  "open": [
-  "Rinne, right mastoid (beat 2): the contact is visible, but the gloved hand that holds the stem fills much of the left of the frame. If you prefer, I can hold the stem further from the foot or move the camera further back.",
-  "Head turn (beat 8): the palm cups the right side of the jaw with the fingers toward the ear. For the left turn the examiner's left forearm crosses the lower front of his neck, so the working right sternocleidomastoid is partly covered. I can bring that forearm in higher (across the chest below the chin) if you want the whole neck clear.",
-  "Water (beat 6): he holds the glass himself in his left hand (see the assumptions). His palm sits 1.7 mm off the glass (fingers and thumb 0.5 mm): a hand cannot lie flat on a 10 cm round glass. The water in the glass tilts with the glass at the lips.",
+  "Water (beat 6): his palm sits 1.7 mm off the glass (fingers and thumb 0.5 mm): a flat palm cannot lie fully on a 10 cm round glass.",
   "Between contacts the hands travel relaxed, but on long moves the fingers still open a little mid-way (seen in the animation, not in these stills); I will tighten that in the animation round.",
   "The larynx rise (f) is small, as in the kit (a 7 mm bump that rises 3 cm): it reads best in the moving animation."
+ ],
+ "changes": [
+  "Mouth (beats 4, 5, 9; panels c): a new interior in this part's own file (cns4/mouth.js; shared/ untouched): a dark rounded cavity and throat, the soft palate as a pink arch with two rounded pillars each side and a rounded tapering uvula in the middle, rounded teeth following the curve of the jaw, the tongue lying on the floor with its tip behind the lower front teeth. Nothing hangs over the lower lip unless the tongue is put out. On 'Ah' the palate and uvula rise a little, evenly, the uvula stays central, the tongue stays down.",
+  "Tongue out (beat 10, e-out): camera straight from the front at mouth level, his face square to it; the tongue comes straight out over the lower lip, tip on the midline, lips their normal colour. The review panel has a thin midline from the nose tip through the chin.",
+  "Tongue in each cheek (beat 11, e): a round bulge between the corner of the mouth and the ear at the level of the teeth; the examiner's index pad presses on it, the other fingers curled clear of his face. Camera from the front, slightly to that side.",
+  "Rinne (beat 2, b): the fork held by the stem only, between thumb and index near the foot, other fingers loosely curled; the hand behind and below the right ear, the forearm from his right; the ear, the mastoid and the fork visible (no cutaway). Air step: the hand below the fork, the ear clear. Weber (beat 3): the foot in the middle of the forehead (halfway between hairline and eyebrows), the hand on the stem the same way, to his right above his eyes.",
+  "Shrug (beat 7, d-shrug): the forearms come from his right side and from in front of him; palms flat on the tops of both shoulders, fingers together pointing back over the shoulders; camera from the front.",
+  "Head turn (beat 8, d-jaw, d-jawL): a natural hand, palm flat against the side of the chin and jaw, fingers together slightly curved along the jaw, thumb relaxed, wrist in line; both sides shown with the working sternocleidomastoid labelled; camera from the front, neck in frame.",
+  "Cough (beat 5): mouth slightly open, the tongue inside."
  ]
 }

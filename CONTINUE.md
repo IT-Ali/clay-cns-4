@@ -1,7 +1,10 @@
 # CONTINUE: CNS part 4 (cranial nerves VIII-XII)
 
 ## Status
-- Round 1 (storyboard): DONE, published at https://claude.ai/artifact/1bsGnak93vFkfbNNcSLwu1 ; waiting for the user's OK or changes.
+- Round 1 (storyboard): published at https://claude.ai/artifact/1bsGnak93vFkfbNNcSLwu1 (same URL is republished each round).
+- Round 2 (storyboard review 1 fixes): mouth interior (cns4/mouth.js), tongue-out front camera + midline panel, cheek
+  bulge + finger, Rinne/Weber stem grip (searched hand placement), shrug from his right/front with fingers back,
+  natural jaw hands both sides (+ panel d-jawL), cough mouth. Storyboard re-rendered; waiting for the user's review.
 - The whole animation already runs end to end in `cns4/cns4-style.js` (it is the storyboard's scene: cameras CAM,
   states ST, contacts CONTACTS). After approval: polish beats, then story_vs_anim.png, previews, final checks.
 
@@ -23,3 +26,20 @@
 - Contact rule: every contact solved to 0.5 mm, reported in storyboard/contacts.json (limit 1.5 mm, never negative).
 - The end hold plays the start hold backwards (style.seekTime) so the last frame equals the first (grain is per frame).
 - Glass: the PATIENT reaches it with his LEFT hand (the table is on his left, 1.2 m from the examiner): flagged for the user.
+
+## mouth.js (what it replaces, so it can go into the kit later)
+`cns4/mouth.js` (`MOUTH.install(P)` once after `PATIENT.build(S, { neuro: true })`; then `M4.face(f)` instead of `P.setFace(f)`):
+- Hides, every frame, the kit's mouth-interior pieces (never edits them): the v4 replacement mouth group in
+  shared/patient.js (`mouthG`: the dark `dish`, `upTeeth`/`loTeeth` rows, `tongueDown`, `tongueOut`) and the v5 "Ah"
+  group in shared/patient-neuro.js (`ahG`: `cav`, `palate`, `throat`, `pillars`, `uvG` with `uvula` and `softPal`, `ahTongue`).
+- Opens the face itself whenever the mouth is open (any jaw > 0.02 or tongue out), not only for "Ah": its own
+  index buffers for the `cranium` (triangles straddling the lip line, |x| < 0.2, z > 0.3) and the hair cap (as the kit's hHole).
+- Its own interior, head-local, in group `mouth4`: cavity + throat (dark, slightly emissive), hard-palate dome, soft palate
+  curtain with an arch edge, two pillars each side, a lathe uvula (rises 2.8 mm and shortens 14% with `ah`, symmetric),
+  rounded teeth rows on the jaw curve (upper fixed; lower + floor + tongue in a group turned about the kit's jaw axis
+  JP = (0, -0.12, -0.08), JK = 0.22 rad per unit of jaw), the tongue (loft, midline groove) resting on the floor with its
+  tip behind the lower incisors, sliding out over the lower teeth and lip with `tongue` 0..1.
+- Tongue in cheek: subtracts the kit's bulge (its formula, on the rest shape) and adds a round one centred at
+  head-local |x| 0.45, y -0.53 (between the mouth corner and the ear, at the teeth), recomputed only when the face changes.
+- Kit constants it copies: MOUTH_Y = -0.5, mouthY(x) = -0.5 + 0.22 x^2, the visemes' jaw values, the jaw rules of setFace.
+- Probe for quick looks: `index.html?probe=mouth` (cns4/probe-mouth.js) and `node tools/probe-shots.mjs mouth <dir> 640 360 2 '<json>'`.
