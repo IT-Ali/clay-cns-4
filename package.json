@@ -1,0 +1,17 @@
+{
+  "name": "clay-cns-4",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Soft Clay CNS examination, part 4 of 11: cranial nerves VIII-XII. npm start renders every MP4.",
+  "type": "module",
+  "scripts": {
+    "start": "node render.mjs",
+    "preview": "node render.mjs --preview",
+    "serve": "node tools/serve.mjs"
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0",
+    "playwright-core": "1.63.0",
+    "three": "0.187.0"
+  }
+}
