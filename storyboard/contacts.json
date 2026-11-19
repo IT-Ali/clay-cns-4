@@ -1,0 +1,252 @@
+[
+ {
+  "name": "Rinne R: foot of the stem on the right mastoid",
+  "gapMM": 0.49,
+  "clearance": false
+ },
+ {
+  "name": "Rinne L: foot of the stem on the left mastoid",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Weber: foot of the stem on the middle of the forehead",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Strike: a prong on the heel of the left glove",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Pen torch: the hand stays clear of his face (clearance, not a contact)",
+  "gapMM": 30,
+  "clearance": true
+ },
+ {
+  "name": "Shrug start: examiner R palm on his right shoulder",
+  "gapMM": 0.48,
+  "clearance": false
+ },
+ {
+  "name": "Shrug start: examiner R index on his right shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug start: examiner R middle on his right shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug start: examiner R ring on his right shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug start: examiner R little on his right shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug start: examiner R thumb on his right shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug start: examiner L palm on his left shoulder",
+  "gapMM": 0.48,
+  "clearance": false
+ },
+ {
+  "name": "Shrug start: examiner L index on his left shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug start: examiner L middle on his left shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug start: examiner L ring on his left shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug start: examiner L little on his left shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug start: examiner L thumb on his left shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug up: examiner R palm on his right shoulder",
+  "gapMM": 0.51,
+  "clearance": false
+ },
+ {
+  "name": "Shrug up: examiner R index on his right shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug up: examiner R middle on his right shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug up: examiner R ring on his right shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug up: examiner R little on his right shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug up: examiner R thumb on his right shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug up: examiner L palm on his left shoulder",
+  "gapMM": 0.51,
+  "clearance": false
+ },
+ {
+  "name": "Shrug up: examiner L index on his left shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug up: examiner L middle on his left shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug up: examiner L ring on his left shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug up: examiner L little on his left shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Shrug up: examiner L thumb on his left shoulder",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Head turn: examiner R palm on the right side of his chin and jaw",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Head turn: examiner R index on the right side of his chin and jaw",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Head turn: examiner R middle on the right side of his chin and jaw",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Head turn: examiner R ring on the right side of his chin and jaw",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Head turn: examiner R little on the right side of his chin and jaw",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Head turn: examiner L palm on the left side of his chin and jaw",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Head turn: examiner L index on the left side of his chin and jaw",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Head turn: examiner L middle on the left side of his chin and jaw",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Head turn: examiner L ring on the left side of his chin and jaw",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Head turn: examiner L little on the left side of his chin and jaw",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Cheek R: pad of the examiner's index finger on the bulge",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Cheek R: the other fingers clear of his face (clearance)",
+  "gapMM": 0.25,
+  "clearance": true
+ },
+ {
+  "name": "Cheek L: pad of the examiner's index finger on the bulge",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Cheek L: the other fingers clear of his face (clearance)",
+  "gapMM": 0.35,
+  "clearance": true
+ },
+ {
+  "name": "Glass: his left palm on the glass",
+  "gapMM": 1.73,
+  "clearance": false
+ },
+ {
+  "name": "Glass: his left index on the glass",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Glass: his left middle on the glass",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Glass: his left ring on the glass",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Glass: his left little on the glass",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Glass: his left thumb on the glass",
+  "gapMM": 0.5,
+  "clearance": false
+ },
+ {
+  "name": "Glass: the rim on his lower lip",
+  "gapMM": 0.51,
+  "clearance": false
+ }
+]

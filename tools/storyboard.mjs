@@ -45,7 +45,8 @@ await page.waitForFunction(() => window.READY || window.FAIL, null, { timeout: 0
 const fail = await page.evaluate(() => window.FAIL); if (fail) { console.log('FAIL', fail); process.exit(1); }
 await page.addScriptTag({ path: path.join(ROOT, 'tools/review-page.js') });
 console.log('built', ((Date.now() - T0) / 1000).toFixed(0), 's');
-const grab = async (file, fn) => { const d = await page.evaluate(fn); fs.writeFileSync(path.join(OUT, 'img', file), Buffer.from(d.split(',')[1], 'base64')); console.log('  ', file, ((Date.now() - T0) / 1000).toFixed(0), 's'); };
+const FORCE = args.includes('--force');
+const grab = async (file, fn) => { if (!FORCE && !only.length && fs.existsSync(path.join(OUT, 'img', file))) { console.log('   (have)', file); return; } const d = await page.evaluate(fn); fs.writeFileSync(path.join(OUT, 'img', file), Buffer.from(d.split(',')[1], 'base64')); console.log('  ', file, ((Date.now() - T0) / 1000).toFixed(0), 's'); };
 for (const p of BEATS) {
   if (only.length && !only.includes(p.id)) continue;
   await grab(p.id + '.jpg', `(() => { window.CAPTIONS = true; REVIEW.beat(); window.seek(${p.t}); return document.getElementById('c').toDataURL('image/jpeg', 0.9); })()`);

@@ -37,8 +37,8 @@
     const Z = V(0, 0, 1), UP = V(0, 1, 0), neck = P.torso.localToWorld(V(0, 5.4, 0.5));
     return {
       plan: { pos: [1.0, 36.5, 0.01], target: [1.0, 6, 0], up: [0, 0, -1], fov: 28, focus: [1, 9, 0], aperture: 0 },
-      mastR: at(mR, [[Z, 0.6], [UP, 0.75], [HZ, -0.05]], 3.4, mR.clone().addScaledVector(Z, 0.2)),
-      airR: at(W.canal.R.p, [[Z, 0.55], [HZ, 0.75], [HY, 0.25]], 3.6, W.canal.R.p.clone().addScaledVector(Z, 0.25).addScaledVector(HY, 0.25)),
+      mastR: at(mR, [[Z, 0.72], [HZ, 0.6], [HY, 0.3]], 3.8, mR.clone().addScaledVector(Z, 0.2).addScaledVector(HY, 0.1)),
+      airR: at(W.canal.R.p, [[HZ, 0.9], [Z, 0.45], [HY, 0.25]], 3.8, W.canal.R.p.clone().addScaledVector(Z, 0.25).addScaledVector(HY, 0.2)),
       fore: at(f, [[HZ, 0.8], [Z, -0.55], [HY, 0.15]], 3.6, f.clone().addScaledVector(HY, -0.1)),
       mouth: at(lips, [[HZ, 1], [HY, -0.2], [Z, -0.05]], 2.0, lips.clone().addScaledVector(HZ, -0.2), 0.0015),
       shrug: at(neck, [[HZ, 0.5], [UP, 0.85], [Z, 0.05]], 8.5, neck, 0.006),
@@ -61,15 +61,15 @@
       [x, y] = p(W.EX.R.hand.group.position); label(ctx, x, y + 40 * k, "examiner's gloved hands: on HIS RIGHT side", { ink: '#26336b' });
       title(ctx, 'Plan from above: his RIGHT = toward the camera = bottom here; his LEFT = far side, with the table');
     } },
-    'b-mastR': { t: 10.0, cam: 'mastR', draw: (ctx, t, w, h) => { callouts((c) => /Rinne R/.test(c.name), [{ name: 'foot of the stem on the R mastoid', ang: -0.6, r: 150 }])(ctx, t, w, h); title(ctx, 'Rinne, right: the foot of the stem on the mastoid (behind and below the ear)'); } },
+    'b-mastR': { t: 10.0, cam: 'mastR', hide: 'R', draw: (ctx, t, w, h) => { callouts((c) => /Rinne R/.test(c.name), [{ name: 'foot of the stem on the R mastoid', ang: -0.6, r: 150 }])(ctx, t, w, h); title(ctx, "Rinne, right: the foot of the stem on the mastoid (cutaway: the examiner's hand hidden)"); } },
     'b-airR': { t: 12.4, cam: 'airR', draw: (ctx, t, w, h) => {
       const c = W.canal.R, pr = []; W.fork.group.traverse((m) => { if (m.isMesh && m.parent !== W.fork.group) pr.push(m); });
       const S = C4.surface(pr, c.p, 1.0), d = C4.dist(c.p, S, 1.0);
       const [x0, y0] = proj(c.p, w, h), [x1, y1] = proj(d.q, w, h); arrow(ctx, x0, y0, x1, y1, '#1b6b2f');
       const k = w / 960, e = proj(c.p.clone().addScaledVector(c.out, 0.6), w, h);
       ctx.save(); ctx.setLineDash([6 * k, 5 * k]); ctx.strokeStyle = '#1b6b2f'; ctx.lineWidth = 1.6 * k; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(e[0], e[1]); ctx.stroke(); ctx.restore();
-      label(ctx, (x0 + x1) / 2 - 90 * k, (y0 + y1) / 2 + 40 * k, 'ear canal opening -> near prong: ' + (Math.abs(d.d) * 10).toFixed(1) + ' cm', { ink: '#1b6b2f', size: 13 });
-      label(ctx, e[0] + 40 * k, e[1] - 18 * k, 'canal axis: both prongs in line with it', { ink: '#1b6b2f', size: 13 });
+      label(ctx, (x0 + x1) / 2 - 150 * k, (y0 + y1) / 2 + 70 * k, 'ear canal opening -> near prong: ' + (Math.abs(d.d) * 10).toFixed(1) + ' cm', { ink: '#1b6b2f', size: 13 });
+      label(ctx, e[0] + 60 * k, e[1] - 50 * k, 'canal axis: both prongs in line with it', { ink: '#1b6b2f', size: 13 });
       title(ctx, 'Rinne, right: the vibrating prongs about 2 cm from the opening of the ear canal, in line with it');
     } },
     'b-fore': { t: 22.4, cam: 'fore', draw: (ctx, t, w, h) => { callouts((c) => /Weber/.test(c.name), [{ name: 'foot on the middle of the forehead', ang: -2.6, r: 150 }])(ctx, t, w, h); title(ctx, 'Weber: the foot of the stem on the middle of the forehead'); } },
@@ -99,9 +99,9 @@
     names: Object.keys(PANELS),
     panel(name) {
       const p = PANELS[name], C = cams();
-      window.CAM_OVERRIDE = C[p.cam] || null; window.REVIEW_OVERLAY = p.draw; return p.t;
+      window.CAM_OVERRIDE = C[p.cam] || null; window.REVIEW_OVERLAY = p.draw; W.EX.R.group.visible = p.hide !== 'R'; return p.t;
     },
-    beat() { window.CAM_OVERRIDE = null; window.REVIEW_OVERLAY = null; },
+    beat() { window.CAM_OVERRIDE = null; window.REVIEW_OVERLAY = null; W.EX.R.group.visible = true; },
     report() { return W.CONTACTS.map((c) => ({ name: c.name, gapMM: +(c.gap * 100).toFixed(2), clearance: !!c.clearance })); },
   };
 })();
