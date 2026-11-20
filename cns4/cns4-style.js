@@ -304,6 +304,8 @@
           for (const v of hv) { const w = v.clone().sub(eyeL), sv = w.dot(dir); if (sv < L - 0.05) m = Math.min(m, w.addScaledVector(dir, -sv).length()); }
           return 12 * Math.max(0, 0.25 - m);
         };
+        // ... and the forearm seen from the side, not pointing into the lens (end-on it reads as a blob)
+        const endOnPen = (st) => (eyeL ? 6 * Math.max(0, st.back.dot(eyeL.clone().sub(pt.p).normalize()) - 0.35) : 0);
         let best = null;
         for (const tv of tilts) for (let k = 0; k < 12; k++) {
           const ax = pt.n.clone().add(tv).normalize(), ref = Math.abs(ax.dot(HY)) < 0.9 ? HY.clone() : HZ.clone();
@@ -318,7 +320,7 @@
               return 4 * Math.max(0, 0.3 - rel.dot(HX.clone().negate())) + 3 * Math.max(0, -0.05 - rel.dot(HY)) + 8 * Math.max(0, 0.35 - eyeD) + 30 * Math.max(0, 0.03 - gap) + 30 * Math.max(0, 0.02 - fgap);
             }
             const cp = canal[side].p, rel = c.clone().sub(cp); let earD = 9; for (const v of hv) earD = Math.min(earD, v.distanceTo(cp));
-            return 6 * Math.max(0, rel.dot(HZ) + 0.2) + 3 * Math.max(0, rel.dot(HY) - 0.05) + 8 * Math.max(0, 0.5 - earD) + 30 * Math.max(0, 0.03 - gap) + 30 * Math.max(0, 0.02 - fgap) + sightPen(hv);
+            return 6 * Math.max(0, rel.dot(HZ) + 0.2) + 3 * Math.max(0, rel.dot(HY) - 0.05) + 8 * Math.max(0, 0.5 - earD) + 30 * Math.max(0, 0.03 - gap) + 30 * Math.max(0, 0.02 - fgap) + sightPen(hv) + endOnPen(st);
           });
           if (!best || s < best.s) best = { s, pp, st };
         }
