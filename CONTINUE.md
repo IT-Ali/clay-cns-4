@@ -23,6 +23,8 @@
   first/last frame identity check, render.mjs + README for the PC. STOP for the user's review after this round.
 
 ## Left to do
+- Round 4 is DONE: previews in previews/ (full part + 24 beat MP4s, 640x360, 1 sample, software), first frame == last
+  frame (clean and captions, pixel-identical), story_vs_anim.png, all contacts 0-1.5 mm. STOPPED for the user's review.
 - Wait for the user's review of the previews. Final MP4s are rendered on the user's PC with `npm start` (no GPU here).
 
 ## Commands (this cloud machine has no GPU: software WebGL, slow)
