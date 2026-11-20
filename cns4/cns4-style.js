@@ -295,7 +295,15 @@
       };
       const searchBone = (pt, side, isFore) => {
         const tilts = isFore ? [V(0, 0, 0), HY.clone().multiplyScalar(0.3), HX.clone().multiplyScalar(-0.3), HY.clone().multiplyScalar(0.3).addScaledVector(HX, -0.3)]
-          : [HY, HY.clone().addScaledVector(HZ, -0.8), HZ.clone().negate(), HY.clone().addScaledVector(HZ, 0.5)].flatMap((d) => [0.55, 1.0].map((k) => d.clone().normalize().multiplyScalar(k)));
+          : [HY, HY.clone().addScaledVector(HZ, -0.8), HZ.clone().negate(), HY.clone().addScaledVector(HZ, 0.5)].concat(side === 'L' ? [HY.clone().negate(), HY.clone().negate().addScaledVector(HZ, -0.8), HY.clone().negate().addScaledVector(HZ, 0.5)] : []).flatMap((d) => [0.55, 1.0].map((k) => d.clone().normalize().multiplyScalar(k)));
+        // left ear: the camera that films it (CAM.rinneL below) must see the foot of the stem, not the back of the hand
+        const eyeL = side === 'L' && !isFore ? pt.p.clone().lerp(canal.L.p, 0.5).addScaledVector(Zw.clone().multiplyScalar(-0.85).addScaledVector(HZ, 0.45).addScaledVector(HY, 0.2).normalize(), 7.2) : null;
+        const sightPen = (hv) => {
+          if (!eyeL) return 0;
+          const dir = pt.p.clone().sub(eyeL), L = dir.length(); dir.normalize(); let m = 9;
+          for (const v of hv) { const w = v.clone().sub(eyeL), sv = w.dot(dir); if (sv < L - 0.05) m = Math.min(m, w.addScaledVector(dir, -sv).length()); }
+          return 12 * Math.max(0, 0.25 - m);
+        };
         let best = null;
         for (const tv of tilts) for (let k = 0; k < 12; k++) {
           const ax = pt.n.clone().add(tv).normalize(), ref = Math.abs(ax.dot(HY)) < 0.9 ? HY.clone() : HZ.clone();
@@ -310,7 +318,7 @@
               return 4 * Math.max(0, 0.3 - rel.dot(HX.clone().negate())) + 3 * Math.max(0, -0.05 - rel.dot(HY)) + 8 * Math.max(0, 0.35 - eyeD) + 30 * Math.max(0, 0.03 - gap) + 30 * Math.max(0, 0.02 - fgap);
             }
             const cp = canal[side].p, rel = c.clone().sub(cp); let earD = 9; for (const v of hv) earD = Math.min(earD, v.distanceTo(cp));
-            return 6 * Math.max(0, rel.dot(HZ) + 0.2) + 3 * Math.max(0, rel.dot(HY) - 0.05) + 8 * Math.max(0, 0.5 - earD) + 30 * Math.max(0, 0.03 - gap) + 30 * Math.max(0, 0.02 - fgap);
+            return 6 * Math.max(0, rel.dot(HZ) + 0.2) + 3 * Math.max(0, rel.dot(HY) - 0.05) + 8 * Math.max(0, 0.5 - earD) + 30 * Math.max(0, 0.03 - gap) + 30 * Math.max(0, 0.02 - fgap) + sightPen(hv);
           });
           if (!best || s < best.s) best = { s, pp, st };
         }
@@ -363,10 +371,11 @@
         const pp2 = settleProp(fork, pp, V(0, 1, 0), S0, forkProngs());
         return pp2;
       };
-      ST.L.strike = strikeL(headC.clone().add(V(0, 0, 2.4)).addScaledVector(HZ, 1.6).addScaledVector(HY, -1.1));
+      // (low, below the frame of the Rinne cameras, so the open glove never stands up in the picture)
+      ST.L.strike = strikeL(headC.clone().add(V(0, -2.0, 2.4)).addScaledVector(HZ, 1.6).addScaledVector(HY, -1.1));
       ST.fork.strike = strikePose(ST.L.strike);
       setProp(fork, ST.fork.strike); record('Strike: a prong on the heel of the left glove', forkProngs(), C4.surface(C4.parts(handOf('L'), 'palm'), heelOf(handOf('L')), 0.5), { group: 'b' });
-      ST.L.strikeW = strikeL(V(-2.6, 12.2, 3.6));
+      ST.L.strikeW = strikeL(V(-2.6, 11.4, 4.2));
       ST.fork.strikeW = strikePose(ST.L.strikeW);
       applyEx('L', ST.L.rest);
       ST.fork.pocket = propForHand(FORK_GRIP, ST.R.pocket);
@@ -662,6 +671,7 @@
         headWide: { pos: fromDir(headC, [[HZ, 0.85], [Z, 0.5], [UPW, 0.2]], 14), target: headC.clone().addScaledVector(HY, -1.3).addScaledVector(HZ, 0.3).toArray(), fov: 28, focus: headC.toArray(), aperture: 0.03 },
         rinneR: { pos: fromDir(earR, [[Z, 0.88], [HZ, 0.42], [HY, 0.1]], 6.6), target: earR.clone().addScaledVector(Z, 0.35).addScaledVector(HY, 0.1).toArray(), fov: 28, focus: earR.toArray(), aperture: 0.006, up: HY.toArray() },
         rinneRm: { pos: fromDir(mR.clone().lerp(earR, 0.4), [[Z, 0.8], [HZ, 0.55], [HY, 0.3]], 6.6), target: mR.clone().lerp(earR, 0.4).addScaledVector(Z, 0.3).addScaledVector(HY, 0.12).toArray(), fov: 28, focus: mR.toArray(), aperture: 0.006, up: HY.toArray() },
+        rinneMid: { pos: fromDir(headC, [[HZ, 0.8], [UPW, 0.6]], 13), target: headC.clone().addScaledVector(HY, -0.3).toArray(), fov: 28, focus: headC.toArray(), aperture: 0.02, up: HY.toArray() },
         rinneL: { pos: fromDir(mL.clone().lerp(earL, 0.5), [[Z, -0.85], [HZ, 0.45], [HY, 0.2]], 7.2), target: mL.clone().lerp(earL, 0.5).addScaledVector(Z, -0.35).addScaledVector(HY, 0.15).toArray(), fov: 28, focus: mL.toArray(), aperture: 0.006, up: HY.toArray() },
         weber: { pos: fromDir(fore.p, [[HZ, 0.85], [Z, -0.45], [HY, 0.12]], 7.0), target: fore.p.clone().addScaledVector(HY, -0.5).addScaledVector(Z, 0.15).toArray(), fov: 28, focus: fore.p.toArray(), aperture: 0.008 },
         mouth: { pos: fromDir(lips0, [[HZ, 1], [HY, -0.22]], 3.0), target: lips0.clone().addScaledVector(HZ, -0.2).toArray(), fov: 28, focus: lips0.clone().addScaledVector(HZ, -0.15).toArray(), aperture: 0.003, up: HY.toArray() },
@@ -678,7 +688,7 @@
         cheekL: { pos: fromDir(lips0, [[HZ, 0.92], [Z, -0.38], [HY, 0.05]], 4.8), target: lips0.clone().addScaledVector(Z, -0.2).toArray(), fov: 28, focus: ST.cheekL.bulge.p.toArray(), aperture: 0.005, up: HY.toArray() },
       };
       const CAM_KEYS = [
-        [0, 'home'], [HOME_HOLD, 'home'], [T.push[1], 'headWide'], [T.toRinne[1], 'rinneRm'], [T.toAirR[0], 'rinneRm'], [T.toAirR[1] + 0.1, 'rinneR'], [T.camL[0], 'rinneR'], [T.camL[1], 'rinneL'], [T.forkOut[0], 'rinneL'],
+        [0, 'home'], [HOME_HOLD, 'home'], [T.push[1], 'headWide'], [T.toRinne[1], 'rinneRm'], [T.toAirR[0], 'rinneRm'], [T.toAirR[1] + 0.1, 'rinneR'], [T.camL[0], 'rinneR'], [(T.camL[0] + T.camL[1]) / 2, 'rinneMid'], [T.camL[1], 'rinneL'], [T.forkOut[0], 'rinneL'],
         [T.toWeber[1], 'weber'], [T.toMouth[0], 'weber'], [T.toMouth[1], 'mouth'], [T.toCough[0], 'mouth'], [T.toCough[1], 'cough'], [T.toDrink[0], 'cough'], [T.toDrink[1], 'drink'],
         [T.camTable[0], 'drink'], [T.camTable[1], 'table'], [T.camSide[0], 'table'], [T.camSide[1], 'drink'], [T.camBack6[0], 'drink'], [T.camBack6[1], 'table'], [T.toShrug[0], 'table'], [T.toShrug[1], 'shrug'], [T.handsOnSh[1], 'shrug'], [T.shrug[0] + 0.1, 'shrugLevel'], [T.shrugDown[0], 'shrugLevel'], [T.shrugDown[1], 'shrug'],
         [T.toTurn[0], 'shrug'], [T.toTurn[1], 'turn'], [T.toRest9[0], 'turn'], [T.toRest9[1], 'tongue9'], [T.toOut[0], 'tongue9'], [T.toOut[1], 'tongueOut'], [T.toCheek[0], 'tongueOut'], [T.toCheek[1], 'cheekR'],
