@@ -282,7 +282,12 @@
       const armMeshes = () => C4.meshesUnder(EX.R.group);
       const sampleOf = (meshes, step) => { const out = []; for (const m of meshes) { m.updateWorldMatrix(true, false); const pa = m.geometry.attributes.position; for (let i = 0; i < pa.count; i += step) out.push(V(0, 0, 0).fromBufferAttribute(pa, i).applyMatrix4(m.matrixWorld)); } return out; };
       // for his LEFT ear the examiner has walked round to his left side: the forearm leaves toward his left (-Z)
-      const naturalBack = (st, side) => V(1, 0, 0).applyQuaternion(st.quat).negate().addScaledVector(Zw, side === 'L' ? -0.75 : 0.75).normalize();
+      // (left: the forearm rises from below at his left side, so the camera on that side sees it along its length)
+      const naturalBack = (st, side) => (side === 'L'
+        ? V(1, 0, 0).applyQuaternion(st.quat).negate().multiplyScalar(0.7).add(V(0, -0.85, -0.6)).normalize()
+        : V(1, 0, 0).applyQuaternion(st.quat).negate().addScaledVector(Zw, 0.75).normalize());
+      // a wrist bent more than about 70 degrees from the line of the fingers is not natural
+      const wristPen = (st) => 4 * Math.max(0, Math.acos(Math.max(-1, Math.min(1, st.back.dot(V(1, 0, 0).applyQuaternion(st.quat).negate())))) - 1.22);
       const judge = (pp, st, at, wantFn) => {
         setProp(fork, pp); HANDS.SLEEVE_DIR = st.left ? [0, -0.42, -1] : [0, -0.42, 1]; applyEx('R', st); HANDS.SLEEVE_DIR = [0, -0.42, 1];
         const hand = handOf('R'), hv = sampleOf(C4.parts(hand, 'hand').concat(C4.parts(hand, 'fingers'), C4.parts(hand, 'thumb')), 7), av = sampleOf(armMeshes(), 11);
@@ -320,7 +325,7 @@
               return 4 * Math.max(0, 0.3 - rel.dot(HX.clone().negate())) + 3 * Math.max(0, -0.05 - rel.dot(HY)) + 8 * Math.max(0, 0.35 - eyeD) + 30 * Math.max(0, 0.03 - gap) + 30 * Math.max(0, 0.02 - fgap);
             }
             const cp = canal[side].p, rel = c.clone().sub(cp); let earD = 9; for (const v of hv) earD = Math.min(earD, v.distanceTo(cp));
-            return 6 * Math.max(0, rel.dot(HZ) + 0.2) + 3 * Math.max(0, rel.dot(HY) - 0.05) + 8 * Math.max(0, 0.5 - earD) + 30 * Math.max(0, 0.03 - gap) + 30 * Math.max(0, 0.02 - fgap) + sightPen(hv) + endOnPen(st);
+            return 6 * Math.max(0, rel.dot(HZ) + 0.2) + 3 * Math.max(0, rel.dot(HY) - 0.05) + 8 * Math.max(0, 0.5 - earD) + 30 * Math.max(0, 0.03 - gap) + 30 * Math.max(0, 0.02 - fgap) + sightPen(hv) + endOnPen(st) + (side === 'L' ? wristPen(st) : 0);
           });
           if (!best || s < best.s) best = { s, pp, st };
         }
