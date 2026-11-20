@@ -609,7 +609,7 @@
         [T.torchIn[0], R.rest], [T.torchIn[0] + 0.25, R.pocketTorch, { relax: 1 }], [T.torchIn[1], R.torchAh, { arc: up(0.5, 0.4) }], [T.torchOut[0], R.torchAh], [T.torchOut[1] - 0.3, R.pocketTorch, { arc: up(0.4, 0.4) }], [T.torchOut[1], R.rest, { relax: 1 }],
         // shrug, head turn (right side), cheeks
         [T.handsOnSh[0], R.rest], [T.handsOnSh[1], (tp) => lerpEx(ST.shrug0.R, ST.shrug1.R, shrugAt(tp)), { arc: up(0.8, 0.8), relax: 0.6 }], [T.handsOffSh[0], (tp) => lerpEx(ST.shrug0.R, ST.shrug1.R, shrugAt(tp))], [T.handsOffSh[1], R.rest, { arc: up(0.8, 0.8), relax: 0.6 }],
-        [T.palmR[0], R.rest], [T.palmR[1], () => fromHead(ST.jawR), { arc: up(0.6, 1.0), relax: 0.6 }], [T.turnRBack[1], () => fromHead(ST.jawR)], [T.palmMove[1], R.rest, { arc: up(0.6, 1.0), relax: 0.6 }],
+        [T.palmR[0], R.rest], [T.palmR[1], () => fromHead(ST.jawR), { arc: up(0.6, 1.0), relax: 0.6 }], [T.turnRBack[1], () => fromHead(ST.jawR)], [T.palmMove[0] + 0.5, R.rest, { arc: up(-0.3, 1.2), relax: 0.6 }],   // leaves low and quickly: the glove never stands up in frame
         [T.torchIn9[0], R.rest], [T.torchIn9[0] + 0.25, R.pocketTorch, { relax: 1 }], [T.torchIn9[1], R.torch9, { arc: up(0.5, 0.4) }], [T.torchOut9[0], R.torch9], [T.torchOut9[1] - 0.3, R.pocketTorch, { arc: up(0.4, 0.4) }], [T.torchOut9[1], R.rest, { relax: 1 }],
         [T.fingerR[0] - 0.6, R.rest], [T.fingerR[1], () => fromHead(ST.cheekR), { arc: up(0.6, 0.9), relax: 0.6 }], [T.offR[0], () => fromHead(ST.cheekR)], [T.offR[1] + 0.6, R.rest, { arc: up(0.6, 0.9), relax: 0.6 }],
         [D, R.rest],
