@@ -283,9 +283,9 @@
       const sampleOf = (meshes, step) => { const out = []; for (const m of meshes) { m.updateWorldMatrix(true, false); const pa = m.geometry.attributes.position; for (let i = 0; i < pa.count; i += step) out.push(V(0, 0, 0).fromBufferAttribute(pa, i).applyMatrix4(m.matrixWorld)); } return out; };
       // for his LEFT ear the examiner has walked round to his left side: the forearm leaves toward his left (-Z)
       // (left: the forearm rises from below at his left side, so the camera on that side sees it along its length)
-      const naturalBack = (st, side) => (side === 'L'
+      const naturalBack = (st, side, bone) => (side === 'L' && bone
         ? V(1, 0, 0).applyQuaternion(st.quat).negate().multiplyScalar(0.7).add(V(0, -0.85, -0.6)).normalize()
-        : V(1, 0, 0).applyQuaternion(st.quat).negate().addScaledVector(Zw, 0.75).normalize());
+        : V(1, 0, 0).applyQuaternion(st.quat).negate().addScaledVector(Zw, side === 'L' ? -0.75 : 0.75).normalize());
       // a wrist bent more than about 70 degrees from the line of the fingers is not natural
       const wristPen = (st) => 4 * Math.max(0, Math.acos(Math.max(-1, Math.min(1, st.back.dot(V(1, 0, 0).applyQuaternion(st.quat).negate())))) - 1.22);
       const judge = (pp, st, at, wantFn) => {
@@ -316,7 +316,7 @@
           const ax = pt.n.clone().add(tv).normalize(), ref = Math.abs(ax.dot(HY)) < 0.9 ? HY.clone() : HZ.clone();
           const r0 = ref.addScaledVector(ax, -ref.dot(ax)).normalize(), rollDir = r0.applyAxisAngle(ax, k * Math.PI / 6);
           const pp = onBone(pt, rollDir, tv), st0 = handForProp(FORK_GRIP, pp);
-          const st = Object.assign({}, st0, { back: naturalBack(st0, side), left: side === 'L' });
+          const st = Object.assign({}, st0, { back: naturalBack(st0, side, true), left: side === 'L' });
           const armPen = 4 * Math.max(0, -st.back.x - 0.15) + 3 * Math.max(0, 0.3 - (side === 'L' ? -st.back.z : st.back.z)) + 3 * Math.max(0, st.back.y - 0.2) + 5 * Math.max(0, st.back.dot(HZ) + 0.05) * (side === 'L' ? 1 : 0);
           const s = armPen + judge(pp, st, pt.p, ({ c, hv, gap, fgap }) => {
             if (isFore) {
