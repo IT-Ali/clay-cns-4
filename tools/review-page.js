@@ -109,9 +109,12 @@
     const p = W.M4.larynx(), k = w / 960; if (!p) return;
     const [x, y] = proj(p, w, h); arrow(ctx, x - 150 * k, y + 40 * k, x, y, '#1b6b2f'); label(ctx, x - 150 * k, y + 52 * k, up ? 'larynx risen (about 2 cm)' : 'larynx (laryngeal prominence) at rest', { ink: '#1b6b2f' });
   }
+  // the skin on top of each shoulder (the trapezius ridge), found by a ray straight down the trunk
+  const shoulderTops = () => { const P = W.P, rc = new THREE.Raycaster(), out = {}; P.torso.updateMatrixWorld(true); const down = V(0, -1, 0).transformDirection(P.torso.matrixWorld);
+    for (const [s, x] of [['R', -1.05], ['L', 1.05]]) { rc.set(P.torso.localToWorld(V(x, 7.5, 0.3)), down); const h = rc.intersectObject(P.torsoMesh, false)[0]; out[s] = h ? h.point.clone() : V(0, 0, 0); } return out; };
   // before/after pairs: the same camera, two moments, each a 2x crop around a point, side by side
   const PAIRS = {
-    'd-shrug2': { cam: 'shrug', zoom: 1.1, focus: () => W.P.torso.localToWorld(V(0, 4.8, 0.4)), a: { t: 54.4, label: 'rest: palms on the shoulder tops' }, b: { t: 56.0, label: 'shrugged: shoulders up about 3 cm' }, title: 'Shrug against the hands: both shoulders rise equally under the palms' },
+    'd-shrug2': { cam: 'shrugLevel', zoom: 1.7, measure: true, focus: () => W.P.torso.localToWorld(V(0, 5.25, 0.4)), a: { t: 54.4, label: 'rest: palms on the shoulder tops' }, b: { t: 56.0, label: 'shrugged: shoulders up about 3 cm' }, title: 'Shrug against the hands: both shoulders rise equally under the palms' },
     'd-scmR': { cam: 'scmL', zoom: 1.3, focus: () => W.P.torso.localToWorld(V(0.42, 5.9, 0.1)), a: { t: 61.0, label: 'head straight' }, b: { t: 63.6, label: 'turning RIGHT: his LEFT SCM stands out' }, title: 'His LEFT sternocleidomastoid, seen from his left side (1.3x): rest vs turning right against the hand' },
     'd-scmL': { cam: 'scmR', zoom: 1.3, focus: () => W.P.torso.localToWorld(V(-0.42, 5.9, 0.1)), a: { t: 61.0, label: 'head straight' }, b: { t: 67.2, label: 'turning LEFT: his RIGHT SCM stands out' }, title: 'His RIGHT sternocleidomastoid, seen from his right side (1.3x): rest vs turning left against the hand' },
     'e-bulgeR': { cam: 'cheekR', zoom: 2, hide: true, focus: () => W.M4.bulge('R').p, a: { t: 82.5, label: 'tongue at rest' }, b: { t: 84.6, label: 'tongue in the RIGHT cheek' }, title: "Right cheek (2x, the examiner's hand hidden): the round bulge between the mouth corner and the ear" },
@@ -131,12 +134,23 @@
       for (const [i, st] of [p.a, p.b].entries()) {
         if (p.hide) { W.EX.R.group.visible = false; W.EX.L.group.visible = false; }
         window.seek(st.t);
-        const [x, y] = proj(p.focus(), Wd, Hd), cw = Wd / 2 / p.zoom, ch = Hd / p.zoom;
+        const [x, y] = proj(p.focus(), Wd, Hd), cw = Wd / 2 / p.zoom, ch = Hd / p.zoom; (p.crop = p.crop || [])[i] = [x - cw / 2, y - ch / 2, (Wd / 2) / cw];
         o.drawImage(cv, x - cw / 2, y - ch / 2, cw, ch, i * Wd / 2, 0, Wd / 2, Hd);
         W.EX.R.group.visible = true; W.EX.L.group.visible = true;
+        if (p.measure) { (p.pts = p.pts || []).push(shoulderTops()); }
         label(o, i * Wd / 2 + Wd / 4, 26 * k, st.label, { ink: '#26336b', size: 14 });
       }
       o.fillStyle = '#f8eedb'; o.fillRect(Wd / 2 - 2 * k, 0, 4 * k, Hd);
+      if (p.measure && p.pts.length === 2) {
+        const up = V(0, 1, 0).transformDirection(W.P.torso.matrixWorld), r = ['R', 'L'].map((s) => (p.pts[1][s].clone().sub(p.pts[0][s]).dot(up) * 10).toFixed(1));
+        // reference lines through the shoulder tops: at rest (dashed) in both halves, shrugged (solid) on the right
+        const line = (i, a, b, dash, col) => { const [cx, cy, sc] = p.crop[i], A = proj(a, Wd, Hd), B = proj(b, Wd, Hd), X = (q) => i * Wd / 2 + (q[0] - cx) * sc, Y = (q) => (q[1] - cy) * sc;
+          o.save(); o.beginPath(); o.rect(i * Wd / 2, 0, Wd / 2, Hd); o.clip(); o.setLineDash(dash ? [9 * k, 7 * k] : []); o.strokeStyle = col; o.lineWidth = 2.2 * k; o.beginPath(); o.moveTo(X(A), Y(A)); o.lineTo(X(B), Y(B)); o.stroke(); o.restore(); };
+        for (const i of [0, 1]) line(i, p.pts[0].R, p.pts[0].L, true, '#f8eedb');
+        line(1, p.pts[1].R, p.pts[1].L, false, '#1b6b2f');
+        label(o, Wd / 2, Hd - 64 * k, 'measured rise of the shoulder tops toward the ears: right ' + r[0] + ' cm, left ' + r[1] + ' cm (dashed: at rest; green: shrugged)', { ink: '#1b6b2f', size: 14 });
+        p.pts = [];
+      }
       title(o, p.title); window.CAM_OVERRIDE = null;
       return out.toDataURL('image/jpeg', 0.9);
     },

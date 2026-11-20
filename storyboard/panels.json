@@ -16,8 +16,8 @@
    "t": 9.9,
    "span": "5.0 - 19.0 s",
    "text": "Rinne: fork on the mastoid, then beside the ear - louder in the air: positive, both ears",
-   "change": "Hold 5.8-7.3 s (still, no caption: the examiner explains). The right hand brings the 512 Hz fork in from his pocket, strikes it on the heel of the left glove (8.1 s, the prongs blur), and presses the foot of the stem on his RIGHT mastoid, holding the stem with thumb and index only, near the foot, the other fingers curled away from the ear, nothing touching the ear, the hand behind and below it. He says it has stopped (silent visemes, 10.3 s); at once the prongs go 2 cm from the right ear canal, in line with it: he still hears it (12.0 s). Struck again (13.4 s); the hand goes over the top of his head (never in front of his face) to the LEFT mastoid, then beside the left ear (the fork held stem-up there, so the forearm stays over his head), a little faster.",
-   "camera": "From his right side at ear level (the ear, the mastoid, the fork and the hand all in frame), then from his left side at ear level for the left ear.",
+   "change": "Hold 5.8-7.3 s (still, no caption: the examiner explains). The right hand brings the 512 Hz fork in from his pocket, strikes it on the heel of the left glove (8.1 s, the prongs blur), and presses the foot of the stem on his RIGHT mastoid, holding the stem with thumb and index only, near the foot, the other fingers curled away from the ear, nothing touching the ear, the hand behind and below it. He says it has stopped (silent visemes, 10.3 s); at once the prongs go 2 cm from the right ear canal, in line with it: he still hears it (12.0 s). Struck again (13.4 s); the examiner walks round to his LEFT side: the hand comes in from his left, below and behind the left ear, to the LEFT mastoid, then beside the left ear, a little faster (the forearm from his left, nothing over his face); then back to his right for Weber.",
+   "camera": "From his right side at ear level (the ear, the mastoid, the fork and the hand all in frame), then from his left side at ear level for the left ear (the examiner now on that side).",
    "sound": "512 Hz pure hum from each strike (8.1 and 13.4 s), fading over a few seconds with the prongs."
   },
   {
@@ -67,7 +67,7 @@
    "span": "51.0 - 59.0 s",
    "text": "Shrug against my hands: strong and equal (trapezius)",
    "change": "Hold 51.8-53.3 s. Both gloved palms settle flat on the tops of his shoulders, on the trapezius ridge between the neck and the acromion, fingers together pointing back over the shoulders, pushing down toward his feet, the forearms coming from his right side and from in front of him (the examiner leaning over from his right); he shrugs both shoulders up about 3 cm against them, equally (54.5-56.9 s; see d-shrug2), then relaxes; the hands go back.",
-   "camera": "From the front, both shoulders and both hands in frame.",
+   "camera": "From the front, both shoulders and both hands in frame; during the shrug itself (about 2 s) a front camera at shoulder level, so the rise reads.",
    "sound": "None."
   },
   {
@@ -140,7 +140,7 @@
   {
    "id": "b-airL2",
    "group": "b) Rinne and Weber",
-   "note": "Left ear, a camera looking at the ear: the prongs 2 cm from the canal opening, in line with it, not hidden by the hand."
+   "note": "Left ear, a camera looking at the ear: the prongs 2 cm from the canal opening, in line with it; the examiner on his left, the forearm from his left below the ear."
   },
   {
    "id": "b-fore",
@@ -166,7 +166,7 @@
    "id": "d-shrug2",
    "group": "d) Shrug and head turn",
    "pair": true,
-   "note": "Same camera, rest vs shrugged: the shoulders rise about 3 cm against the hands."
+   "note": "A front camera at shoulder level (the same camera the animation uses during the shrug), rest vs shrugged: the shoulders rise toward his ears against the hands; the measured rise is printed."
   },
   {
    "id": "d-jaw",

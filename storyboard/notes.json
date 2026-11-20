@@ -14,7 +14,7 @@
   "Ear canal opening: the shared ear is a smooth oval, so a small dark opening is set into the front of each ear's concha in my own code, sunk just below the skin surface like the nostrils, so it has no raised edge.",
   "'In line with the canal': the two prongs stand one behind the other along the canal's axis, the near prong 2 cm from the opening, the middle of the prongs level with it.",
   "The 512 Hz fork and the pen torch come into frame in the examiner's right hand from his pocket (off frame) and go back there, so the home shot stays identical. The fork is struck on the heel of the left glove, held palm up in the air at his right side, and held by its stem only (a pen grip 3 cm from the foot).",
-  "The left ear is tested after a second strike (the first has died away). The hand reaches the left mastoid over the top of his head, never in front of his face.",
+  "The left ear is tested after a second strike (the first has died away). For the left ear the examiner walks round to his left side (off camera, during the camera move), then back to his right.",
   "His answers ('gone', 'yes, I hear it', 'in the middle', a normal sentence after the sips) are silent visemes only. For Weber he says it is in the middle; he does not point.",
   "No tongue depressor: the new mouth interior shows the palate and the uvula over the tongue lying on the floor of the mouth.",
   "The water: the bedside table is on his LEFT, about 1.2 m from the examiner's hands, which no arm reaches. So HE takes the glass with his LEFT hand, drinks two sips and puts it back. This changes who holds the glass (not the clinical step); tell me if you want the examiner to bring it instead.",
@@ -25,8 +25,7 @@
   "The film grain changes every frame, so to make the last frame identical to the first, the final 1 s hold plays the first 1 s hold backwards (the scene is the same still home shot).",
   "All captions sit at the top of the frame (the hands come in from the bottom and the sides).",
   "The inside of the mouth is this part's own model (cns4/mouth.js), shown in place of the kit's pieces, which stay untouched in shared/ but are hidden. The tongue-in-cheek bulge is replaced in the same file: the kit's bulge is taken back out and a round one put in its place, between the corner of the mouth and the ear at the level of the teeth.",
-  "The middle of the forehead for Weber is found on his skin halfway between the hairline and the eyebrows (the kit's 'forehead' landmark sits at the hairline).",
-  "Beside the LEFT ear (Rinne, air step) the fork is held stem-up, the hand above the ear, so the forearm comes over his head from his right as asked; the prongs are still one behind the other along the canal, 2 cm from it."
+  "The middle of the forehead for Weber is found on his skin halfway between the hairline and the eyebrows (the kit's 'forehead' landmark sits at the hairline)."
  ],
  "open": [
   "SCM crops (d-scmR/L): the neck is now filmed from the side of the working muscle, rest vs turning. The sternocleidomastoid standing out is the kit's own effect (shared/patient-neuro.js, about 9 mm at a 60-degree turn; here the turn is 22 degrees against the hand), so the change is subtle. I can make it stronger in this part's own code, as with the larynx, if you want it to read more clearly.",
@@ -35,14 +34,8 @@
   "Between contacts the hands travel relaxed, but on long moves the fingers still open a little mid-way (seen in the animation, not in these stills); I will tighten that in the animation round."
  ],
  "changes": [
-  "Cough (beat 5): the mouth only slightly open, the tongue stays inside (lower and further back whenever the mouth is only a little open).",
-  "Mouth interior (beats 4, 9; c): each side now has two curved arches, the palatoglossal in front and the palatopharyngeal behind, flowing out of the soft palate edge down to the side of the tongue; even, continuous rows of teeth along the jaw curve (each tooth turned along the curve, neighbours touching); no open shell edges in the cavity.",
-  "Tongue out (beat 10, KEY): about 2-3 cm beyond the lower lip, a rounded tip, a slight midline groove, the lower lip under it; e-out keeps the front camera and the nose-to-chin midline.",
-  "Tongue in cheek (beat 11; e-cheekR/L; new e-bulgeR/L): a round bulge about 2 cm across, clearly raised, between the mouth corner and the ear at mouth level (the kit's bulge is replaced); the index pad presses on its middle, the other fingers curled with the thumb over them. Before/after 2x crops with the same camera.",
-  "Swallow (f): the larynx is this part's own subtle prominence on the front of the neck, rising about 2 cm and falling back in each swallow (shown only in this beat, so the home shot is unchanged); the arrows sit on the real point. The camera is from his RIGHT front, a little low: from his left front his raised left arm and the glass cover the neck.",
-  "Shrug (beat 7; d-shrug; new d-shrug2): both palms on the tops of the shoulders (the trapezius ridge between the neck and the acromion), fingers together pointing back, pushing toward his feet; rest vs shrugged pair with the same camera.",
-  "Rinne (beat 2; b-mastR; b-airR; new b-airL2): the stem held with thumb and index only, the other fingers curled away from the ear, nothing within 8 mm of the ear; b-mastR from in front of and a little below the ear (from behind, the pillow and the hand block it); b-airL2 looks at the left ear with the prongs 2 cm from the canal.",
-  "'Ah' (beat 4): the torch is small and comes from in front and below; the glove stays out of the frame.",
-  "SCM (new d-scmR/L): neck crops, rest vs turning, each from the side of the working muscle."
+  "Cough (beat 5): the mouth interior is narrower (cavity, soft palate, teeth rows and gums stop inside the mouth corners), so nothing shows through the cheek; checked from both 3/4 sides with the mouth open (cough, 'Ah', tongue out) and from every open-mouth beat's own camera.",
+  "Rinne, left ear (beat 2; b-airL2): the examiner walks round to his LEFT side; the hand comes in from his left, below and behind the left ear, the forearm from his left, nothing over his face; then back to his right for Weber.",
+  "Shrug (beat 7; d-shrug2): during the shrug the camera moves to the front at shoulder level (about 2.3 s), so the shoulders' rise toward the ears and the shorter-looking neck read; d-shrug2 uses that same camera and prints the measured rise."
  ]
 }

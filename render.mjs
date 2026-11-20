@@ -4,7 +4,8 @@
 // Each frame is rendered ONCE (clean, at SET.RENDER quality: 64 samples) and saved as a PNG; the captioned frame is the
 // same picture with the caption plaque drawn on top (exactly what the stage's overlay does). Frames already on disk are
 // skipped, so if a render stops, running npm start again carries on where it stopped.
-// Options: --samples N   --w 1920 --h 1080   --preview (8 samples, 960x540, into out/preview/)   --frames a-b
+// Options: --samples N   --w 1920 --h 1080   --preview (8 samples, 960x540, into out/preview/)   --frames a-b   --beat N
+//          (renders that beat's frames first and makes its MP4s as soon as they are all there)
 //          --software (no GPU: SwiftShader)   CHROME_PATH=... to use a particular Chrome
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -35,6 +36,7 @@ const info = await page.evaluate(() => ({ D: window.DURATION, beats: window.CNS4
 console.log(`built in ${el()} | ${W}x${H}, ${info.samples} samples | GPU: ${info.gl}`);
 const NF = Math.round(info.D * FPS);
 let [f0, f1] = (opt('frames', '') || `0-${NF - 1}`).split('-').map(Number);
+if (opt('beat', '')) { const bt = info.beats.find((b) => b.n === +opt('beat')); f0 = Math.round(bt.t0 * FPS); f1 = Math.round(bt.t1 * FPS) - 1; }
 
 // 1. the frames (skipping those already rendered)
 const todo = []; for (let i = f0; i <= Math.min(f1, NF - 1); i++) if (!fs.existsSync(path.join(FR.clean, pad(i) + '.png')) || !fs.existsSync(path.join(FR.captions, pad(i) + '.png'))) todo.push(i);
@@ -71,15 +73,21 @@ await browser.close();
 
 // 3. the MP4s: the whole part and every beat, both versions
 const enc = ['-c:v', 'libx264', '-preset', 'slow', '-crf', '15', '-pix_fmt', 'yuv420p', '-r', String(FPS), '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart'];
-const all = fs.readdirSync(FR.clean).filter((f) => f.endsWith('.png')).length;
-if (all < NF) { console.log(`only ${all} of ${NF} frames: run again to finish them before the MP4s are made`); process.exit(0); }
+const have = (v, a, n) => { for (let i = a; i < a + n; i++) if (!fs.existsSync(path.join(FR[v], pad(i) + '.png'))) return false; return true; };
+let made = 0;
 for (const v of ['captions', 'clean']) {
-  ff(['-framerate', String(FPS), '-i', path.join(FR[v], '%06d.png'), '-i', wav, '-map', '0:v', '-map', '1:a', ...enc, '-shortest', path.join(OUT, `cns4_${v}.mp4`)]);
+  // every beat whose frames are all on disk gets its own MP4 now
   for (const b of info.beats) {
     const s = Math.round(b.t0 * FPS), n = Math.round(b.t1 * FPS) - s, name = b.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const file = path.join(OUT, 'beats', `cns4_beat${String(b.n).padStart(2, '0')}_${name}_${v}.mp4`);
+    if (!have(v, s, n) || (fs.existsSync(file) && !flag('remake'))) continue;
     ff(['-framerate', String(FPS), '-start_number', String(s), '-i', path.join(FR[v], '%06d.png'), '-ss', (s / FPS).toFixed(4), '-t', (n / FPS).toFixed(4), '-i', wav,
-      '-map', '0:v', '-map', '1:a', '-frames:v', String(n), ...enc, '-af', 'afade=t=in:d=0.04,afade=t=out:st=' + (n / FPS - 0.04).toFixed(3) + ':d=0.04',
-      path.join(OUT, 'beats', `cns4_beat${String(b.n).padStart(2, '0')}_${name}_${v}.mp4`)]);
+      '-map', '0:v', '-map', '1:a', '-frames:v', String(n), ...enc, '-af', 'afade=t=in:d=0.04,afade=t=out:st=' + (n / FPS - 0.04).toFixed(3) + ':d=0.04', file]);
+    made++;
   }
+  // the whole part once every frame is there
+  const full = path.join(OUT, `cns4_${v}.mp4`);
+  if (have(v, 0, NF) && (!fs.existsSync(full) || flag('remake'))) { ff(['-framerate', String(FPS), '-i', path.join(FR[v], '%06d.png'), '-i', wav, '-map', '0:v', '-map', '1:a', ...enc, '-shortest', full]); made++; }
 }
+if (!have('clean', 0, NF)) console.log(`not every frame is rendered yet: run again to carry on (${made} MP4s made this time)`);
 console.log(`all done in ${el()}: ${OUT}`);

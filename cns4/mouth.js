@@ -70,7 +70,7 @@
     const lower = new THREE.Group(); lower.position.copy(JP).negate(); jawPivot.add(lower);   // turns with the mandible
 
     // the cavity, the back of the throat
-    mesh(new THREE.SphereGeometry(1, 40, 28).scale(0.2, 0.21, 0.32), M.cavity, upper, [0, MOUTH_Y - 0.14, ML - 0.27], 'cavity');
+    mesh(new THREE.SphereGeometry(1, 40, 28).scale(0.165, 0.2, 0.3), M.cavity, upper, [0, MOUTH_Y - 0.14, ML - 0.29], 'cavity');
     mesh(new THREE.SphereGeometry(1, 32, 20).scale(0.12, 0.13, 0.03), M.throat, upper, [0, MOUTH_Y - 0.13, ML - 0.52], 'throat');
     // the hard palate: a shallow pink dome behind the upper teeth
     { const g = new THREE.SphereGeometry(1, 40, 16, 0, Math.PI * 2, 0, Math.PI / 2); g.scale(0.15, 0.065, 0.17); mesh(g, M.palate, upper, [0, MOUTH_Y + 0.0, ML - 0.2], 'hard-palate'); }
@@ -84,8 +84,8 @@
     const archCurve = (w, flare, top, foot, z, zFoot, n = 40) => { const pts = []; for (let i = 0; i <= n; i++) { const a = Math.PI * i / n, s = Math.sin(a), ww = w * (1 + flare * (1 - s)); pts.push([-Math.cos(a) * ww, foot + (top - foot) * Math.pow(s, 0.65), K.lerp(zFoot, z, s)]); } return pts; };
     const FRONT = archCurve(0.125, 0.3, ARCH.top, MOUTH_Y - 0.215, 0.012, 0.07), BACK = archCurve(0.095, 0.22, ARCH.top + 0.012, MOUTH_Y - 0.23, -0.035, -0.06);
     const curtain = (() => {   // the soft palate: the membrane from the roof down to the front arch
-      const sh = new THREE.Shape(); sh.moveTo(FRONT[0][0] - 0.03, FRONT[0][1]); FRONT.forEach(([x, y]) => sh.lineTo(x, y));
-      sh.lineTo(FRONT[FRONT.length - 1][0] + 0.03, FRONT[FRONT.length - 1][1]); sh.lineTo(0.2, MOUTH_Y + 0.08); sh.lineTo(-0.2, MOUTH_Y + 0.08); sh.closePath();
+      const sh = new THREE.Shape(); sh.moveTo(FRONT[0][0] - 0.015, FRONT[0][1]); FRONT.forEach(([x, y]) => sh.lineTo(x, y));
+      sh.lineTo(FRONT[FRONT.length - 1][0] + 0.015, FRONT[FRONT.length - 1][1]); sh.lineTo(0.165, MOUTH_Y + 0.06); sh.lineTo(-0.165, MOUTH_Y + 0.06); sh.closePath();
       const g = new THREE.ExtrudeGeometry(sh, { depth: 0.02, bevelEnabled: true, bevelThickness: 0.008, bevelSize: 0.008, bevelSegments: 3, curveSegments: 24 }); g.translate(0, 0, -0.005);
       return mesh(g, M.soft, softG, null, 'soft-palate');
     })();
@@ -100,7 +100,7 @@
     // teeth: rounded crowns on the curve of the jaw; the upper row hangs from the upper gum, the lower row stands on the lower
     const arch = (x, back) => -back * x * x - 0.9 * Math.pow(Math.abs(x), 3);
     const teethRow = (parent, isUpper) => {
-      const N = 7, W = isUpper ? 0.034 : 0.03, H0 = isUpper ? 0.056 : 0.048;
+      const N = 6, W = isUpper ? 0.032 : 0.029, H0 = isUpper ? 0.056 : 0.048;
       const z0 = isUpper ? ML - 0.022 : ML - 0.05, yGum = isUpper ? MOUTH_Y + 0.035 : MOUTH_Y - 0.07, back = isUpper ? 2.4 : 2.6;
       const g = new THREE.Group(); parent.add(g);
       const zOf = (x) => z0 + arch(x, back), slope = (x) => -(2 * back * x + 2.7 * x * Math.abs(x));
@@ -117,7 +117,7 @@
           t.rotation.y = -Math.atan(slope(cx));                                // the tooth's width along the curve
           x = x1;
         }
-        const gp = []; for (let k = 0; k <= 12; k++) { const xx = sx * (0.004 + 0.24 * k / 12); gp.push([xx, yGum + (isUpper ? 0.008 : -0.008), zOf(xx) - 0.018]); }
+        const gp = []; for (let k = 0; k <= 12; k++) { const xx = sx * (0.004 + 0.17 * k / 12); gp.push([xx, yGum + (isUpper ? 0.008 : -0.008), zOf(xx) - 0.018]); }
         mesh(K.tube(gp, 0.021, { radial: 10, segments: 36 }), M.gum, g, null, 'gum');
       }
       return g;

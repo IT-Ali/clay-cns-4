@@ -281,9 +281,10 @@
       (bed.pillows || []).forEach((p) => p.traverse((m) => { if (m.isMesh && !pillowMs.includes(m)) pillowMs.push(m); }));
       const armMeshes = () => C4.meshesUnder(EX.R.group);
       const sampleOf = (meshes, step) => { const out = []; for (const m of meshes) { m.updateWorldMatrix(true, false); const pa = m.geometry.attributes.position; for (let i = 0; i < pa.count; i += step) out.push(V(0, 0, 0).fromBufferAttribute(pa, i).applyMatrix4(m.matrixWorld)); } return out; };
-      const naturalBack = (st, extra) => V(1, 0, 0).applyQuaternion(st.quat).negate().addScaledVector(Zw, 0.75).add(extra || V(0, 0, 0)).normalize();
+      // for his LEFT ear the examiner has walked round to his left side: the forearm leaves toward his left (-Z)
+      const naturalBack = (st, side) => V(1, 0, 0).applyQuaternion(st.quat).negate().addScaledVector(Zw, side === 'L' ? -0.75 : 0.75).normalize();
       const judge = (pp, st, at, wantFn) => {
-        setProp(fork, pp); applyEx('R', st);
+        setProp(fork, pp); HANDS.SLEEVE_DIR = st.left ? [0, -0.42, -1] : [0, -0.42, 1]; applyEx('R', st); HANDS.SLEEVE_DIR = [0, -0.42, 1];
         const hand = handOf('R'), hv = sampleOf(C4.parts(hand, 'hand').concat(C4.parts(hand, 'fingers'), C4.parts(hand, 'thumb')), 7), av = sampleOf(armMeshes(), 11);
         const S0 = C4.surface([cranium].concat(ears, pillowMs, [P.torsoMesh]), at, 2.2);
         let gap = C4.RMAX; for (const v of av) gap = Math.min(gap, C4.dist(v, S0, gap > 0 ? gap + 1e-6 : C4.RMAX).d);
@@ -300,8 +301,8 @@
           const ax = pt.n.clone().add(tv).normalize(), ref = Math.abs(ax.dot(HY)) < 0.9 ? HY.clone() : HZ.clone();
           const r0 = ref.addScaledVector(ax, -ref.dot(ax)).normalize(), rollDir = r0.applyAxisAngle(ax, k * Math.PI / 6);
           const pp = onBone(pt, rollDir, tv), st0 = handForProp(FORK_GRIP, pp);
-          const st = Object.assign({}, st0, { back: naturalBack(st0, side === 'L' ? HY.clone().multiplyScalar(0.7) : null) });
-          const armPen = 4 * Math.max(0, -st.back.x - 0.15) + 3 * Math.max(0, 0.3 - st.back.z) + (side === 'L' ? 5 * Math.max(0, st.back.dot(HZ) + 0.05) + 3 * Math.max(0, 0.3 - st.back.dot(HY)) : 3 * Math.max(0, st.back.y - 0.2));
+          const st = Object.assign({}, st0, { back: naturalBack(st0, side), left: side === 'L' });
+          const armPen = 4 * Math.max(0, -st.back.x - 0.15) + 3 * Math.max(0, 0.3 - (side === 'L' ? -st.back.z : st.back.z)) + 3 * Math.max(0, st.back.y - 0.2) + 5 * Math.max(0, st.back.dot(HZ) + 0.05) * (side === 'L' ? 1 : 0);
           const s = armPen + judge(pp, st, pt.p, ({ c, hv, gap, fgap }) => {
             if (isFore) {
               const rel = c.clone().sub(pt.p), eyes = ['R', 'L'].map((e) => P.eyes[e].group.getWorldPosition(V(0, 0, 0)));
@@ -338,9 +339,9 @@
         let best = null;
         for (let k = -11; k <= 12; k++) for (const flip of [1, -1]) {
           const pp = airAt(side, k * Math.PI / 12, flip), st0 = handForProp(FORK_GRIP, pp);
-          const st = Object.assign({}, st0, { back: naturalBack(st0, side === 'L' ? HY.clone().multiplyScalar(0.7) : null) });
-          const cp = canal[side].p, armPen = 4 * Math.max(0, -st.back.x - 0.15) + 3 * Math.max(0, 0.3 - st.back.z) + (side === 'L' ? 5 * Math.max(0, st.back.dot(HZ) + 0.05) + 3 * Math.max(0, 0.3 - st.back.dot(HY)) : 3 * Math.max(0, st.back.y - 0.2));
-          const s = armPen + judge(pp, st, cp, ({ c, hv, gap, fgap }) => { let earD = 9; for (const v of hv) earD = Math.min(earD, v.distanceTo(cp)); const rel = c.clone().sub(cp); return 8 * Math.max(0, 0.5 - earD) + 4 * Math.max(0, rel.dot(HY) + 0.3) + 2 * Math.max(0, rel.dot(HZ) + 0.1) + 30 * Math.max(0, 0.03 - gap) + 30 * Math.max(0, 0.04 - fgap); });
+          const st = Object.assign({}, st0, { back: naturalBack(st0, side), left: side === 'L' });
+          const cp = canal[side].p, armPen = 4 * Math.max(0, -st.back.x - 0.15) + 3 * Math.max(0, 0.3 - (side === 'L' ? -st.back.z : st.back.z)) + 3 * Math.max(0, st.back.y - 0.2) + 5 * Math.max(0, st.back.dot(HZ) + 0.05) * (side === 'L' ? 1 : 0);
+          const s = armPen + judge(pp, st, cp, ({ c, hv, gap, fgap }) => { let earD = 9; for (const v of hv) earD = Math.min(earD, v.distanceTo(cp)); const rel = c.clone().sub(cp); return 8 * Math.max(0, 0.5 - earD) + 4 * Math.max(0, rel.dot(HY) + 0.3) + (side === 'L' ? 6 : 2) * Math.max(0, rel.dot(HZ) + 0.1) + 30 * Math.max(0, 0.03 - gap) + 30 * Math.max(0, 0.04 - fgap); });
           if (!best || s < best.s) best = { s, pp, st };
         }
         return best;
@@ -387,7 +388,9 @@
       ST.R.pocketFork = withBack(ST.R.pocket, V(0.2, -0.5, 1)); ST.R.pocketFork.pose = FORK_GRIP.pose;
       ST.R.pocketTorch = withBack(ST.R.pocket, V(0.2, -0.5, 1)); ST.R.pocketTorch.pose = TORCH_GRIP.pose;
       // over his crown on the way to the left ear (the hand never passes in front of his face)
-      ST.R.overHead = forkHand({ p: headC.clone().addScaledVector(HY, 1.25).addScaledVector(HZ, -0.2).add(V(0, 0, 0.1)), q: ST.fork.mastL.q.clone() }, BACK.mastL);
+      // the hand coming in from his left (off frame, low), after the examiner has walked round
+      ST.R.leftIn = Object.assign({}, ST.R.mastL, { wrist: ST.R.mastL.wrist.clone().add(V(1.0, -2.5, -4.0)) });
+      for (const k of ['mastL', 'mastLoff', 'airL', 'leftIn']) ST.R[k].left = true;
 
       // ---- the pen torch: the lens in front of and below his mouth, the beam into the back of the mouth
       const lips0 = P.anchor('lips');
@@ -545,7 +548,7 @@
       root.CNS4_WORLD = Object.assign(root.CNS4_WORLD || {}, { S, P, SH, EX, fork, torch, bed, table, ST, L, canal, mastoid, fore, CONTACTS, FORK_GRIP, TORCH_GRIP, GRIP, handForProp, setProp, applyEx, head, cranium, C4, setGlass, armForGlass, fromHead, T, BEATS, CAPTIONS });
 
       // ================================================================ timelines (all on the pose clock)
-      const lerpEx = (a, b, u) => ({ wrist: a.wrist.clone().lerp(b.wrist, u), quat: a.quat.clone().slerp(b.quat, u), pose: blendPose(a.pose, b.pose, u), back: a.back.clone().lerp(b.back, u).normalize() });
+      const lerpEx = (a, b, u) => ({ wrist: a.wrist.clone().lerp(b.wrist, u), quat: a.quat.clone().slerp(b.quat, u), pose: blendPose(a.pose, b.pose, u), back: a.back.clone().lerp(b.back, u).normalize(), left: u < 0.5 ? a.left : b.left });
       const PK = ['index', 'middle', 'ring', 'little'];
       function blendPose(a, b, u) {
         if (a === b) return a;
@@ -572,8 +575,8 @@
         [0, R.rest], [T.toRinne[1], R.rest],
         [T.forkIn[0], R.rest], [T.forkIn[0] + 0.35, R.pocketFork, { relax: 1 }], [T.forkIn[1], R.strikeUp, { arc: up(0.6, 0.6) }], [T.strike1, R.strike], [T.toMastR[0] + 0.15, R.strikeUp],
         [T.toMastR[1] - 0.25, R.mastRoff, { arc: up(0.4, 0.6) }], [T.onMastR[0], R.mastR], [T.onMastR[1], R.mastR], [T.toAirR[1], R.airR, { arc: mastoid.R.n.clone().multiplyScalar(0.3) }], [T.airR[1], R.airR],
-        [T.strike2 - 0.3, R.strikeUp, { arc: up(0.3, 0.4) }], [T.strike2, R.strike], [T.strike2 + 0.2, R.strikeUp], [T.toMastL[0] + 0.55, R.overHead, { arc: up(0.6, 0) }], [T.toMastL[1] - 0.2, R.mastLoff], [T.onMastL[0], R.mastL], [T.onMastL[1], R.mastL],
-        [T.toAirL[1], R.airL, { arc: mastoid.L.n.clone().multiplyScalar(0.3) }], [T.airL[1], R.airL], [T.forkOut[0] + 0.5, R.overHead, { arc: up(0.4, 0) }], [T.forkOut[1], R.pocketFork, { arc: up(0.5, 0.8) }], [T.forkOut[1] + 0.3, R.rest, { relax: 1 }],
+        [T.strike2 - 0.3, R.strikeUp, { arc: up(0.3, 0.4) }], [T.strike2, R.strike], [T.strike2 + 0.2, R.strikeUp], [T.toMastL[0] + 0.15, R.pocketFork, { arc: up(0.3, 0.4) }], [T.toMastL[0] + 0.17, R.leftIn], [T.toMastL[1] - 0.2, R.mastLoff, { arc: V(0, -0.3, -0.4) }], [T.onMastL[0], R.mastL], [T.onMastL[1], R.mastL],
+        [T.toAirL[1], R.airL, { arc: mastoid.L.n.clone().multiplyScalar(0.3) }], [T.airL[1], R.airL], [T.forkOut[0] + 0.6, R.leftIn, { arc: V(0, -0.3, -0.4) }], [T.forkOut[0] + 0.62, R.pocketFork], [T.forkOut[1], R.pocketFork], [T.forkOut[1] + 0.3, R.rest, { relax: 1 }],
         // Weber
         [T.forkIn3[0], R.rest], [T.forkIn3[0] + 0.3, R.pocketFork, { relax: 1 }], [T.forkIn3[1], R.strikeWUp, { arc: up(0.5, 0.5) }], [T.strike3, R.strikeW], [T.toFore[0], R.strikeWUp],
         [T.toFore[1] - 0.2, R.foreOff, { arc: up(0.4, 0.3) }], [T.onFore[0], R.fore], [T.onFore[1], R.fore], [T.forkOut3[0] + 0.6, R.pocketFork, { arc: up(0.5, 0.6) }], [T.forkOut3[1], R.rest, { relax: 1 }],
@@ -657,6 +660,8 @@
         table: { pos: [0.5, 19.5, 6.5], target: [-4.6, 9.4, -4.4], fov: 28, focus: [-4.3, 9.0, -4.6], aperture: 0.03 },
         drink: { pos: fromDir(neckF, [[Z, 0.92], [HZ, 0.35], [UPW, 0.1]], 6.2), target: neckF.clone().addScaledVector(HY, 0.45).addScaledVector(HZ, 0.35).toArray(), fov: 28, focus: neckF.clone().addScaledVector(HY, 0.4).toArray(), aperture: 0.008 },
         shrug: { pos: fromDir(neckF, [[HZ, 0.82], [UPW, 0.5], [Z, 0.1]], 11.5), target: neckF.clone().addScaledVector(HY, -0.2).toArray(), fov: 28, focus: neckF.toArray(), aperture: 0.015, up: HY.toArray() },
+        // the shrug filmed square to his chest at shoulder level, so the shoulders' rise toward his ears shows
+        shrugLevel: (() => { P.torso.updateMatrixWorld(true); const m = P.torso.matrixWorld, up = V(0, 1, 0).transformDirection(m), fr = V(0, 0, 1).transformDirection(m), c = P.torso.localToWorld(V(0, 5.0, 0.4)); return { pos: c.clone().addScaledVector(fr, 10.5).addScaledVector(up, 0.3).toArray(), target: c.clone().addScaledVector(up, 0.35).toArray(), fov: 28, focus: c.toArray(), aperture: 0.012, up: up.toArray() }; })(),
         turn: { pos: fromDir(neckF, [[HZ, 1], [HY, -0.08]], 8.8), target: neckF.clone().addScaledVector(HY, 0.5).toArray(), fov: 28, focus: neckF.toArray(), aperture: 0.012, up: HY.toArray() },
         tongue9: { pos: fromDir(lips0, [[HZ, 1], [HY, 0.24]], 2.9), target: lips0.clone().addScaledVector(HZ, -0.2).addScaledVector(HY, -0.06).toArray(), fov: 28, focus: lips0.clone().addScaledVector(HZ, -0.15).toArray(), aperture: 0.003, up: HY.toArray() },
         tongueOut: { pos: lips0.clone().addScaledVector(HZ, 3.8).toArray(), target: lips0.clone().toArray(), fov: 28, focus: lips0.clone().addScaledVector(HZ, 0.1).toArray(), aperture: 0.004, up: HY.toArray() },
@@ -666,7 +671,7 @@
       const CAM_KEYS = [
         [0, 'home'], [HOME_HOLD, 'home'], [T.push[1], 'headWide'], [T.toRinne[1], 'rinneRm'], [T.toAirR[0], 'rinneRm'], [T.toAirR[1] + 0.1, 'rinneR'], [T.camL[0], 'rinneR'], [T.camL[1], 'rinneL'], [T.forkOut[0], 'rinneL'],
         [T.toWeber[1], 'weber'], [T.toMouth[0], 'weber'], [T.toMouth[1], 'mouth'], [T.toCough[0], 'mouth'], [T.toCough[1], 'cough'], [T.toDrink[0], 'cough'], [T.toDrink[1], 'drink'],
-        [T.camTable[0], 'drink'], [T.camTable[1], 'table'], [T.camSide[0], 'table'], [T.camSide[1], 'drink'], [T.camBack6[0], 'drink'], [T.camBack6[1], 'table'], [T.toShrug[0], 'table'], [T.toShrug[1], 'shrug'],
+        [T.camTable[0], 'drink'], [T.camTable[1], 'table'], [T.camSide[0], 'table'], [T.camSide[1], 'drink'], [T.camBack6[0], 'drink'], [T.camBack6[1], 'table'], [T.toShrug[0], 'table'], [T.toShrug[1], 'shrug'], [T.handsOnSh[1], 'shrug'], [T.shrug[0] + 0.1, 'shrugLevel'], [T.shrugDown[0], 'shrugLevel'], [T.shrugDown[1], 'shrug'],
         [T.toTurn[0], 'shrug'], [T.toTurn[1], 'turn'], [T.toRest9[0], 'turn'], [T.toRest9[1], 'tongue9'], [T.toOut[0], 'tongue9'], [T.toOut[1], 'tongueOut'], [T.toCheek[0], 'tongueOut'], [T.toCheek[1], 'cheekR'],
         [T.camCheekL[0], 'cheekR'], [T.camCheekL[1], 'cheekL'], [T.pull[0], 'cheekL'], [T.pull[1], 'home'], [D, 'home'],
       ];
@@ -713,7 +718,8 @@
         setGlass(glassAtT(tp), level(tp));
         // examiner
         const r = exR(tp), l = exL(tp);
-        applyEx('R', r); applyEx('L', l);
+        HANDS.SLEEVE_DIR = r.left ? [0, -0.42, -1] : [0, -0.42, 1];   // the sleeve leaves toward the side the examiner stands on
+        applyEx('R', r); HANDS.SLEEVE_DIR = [0, -0.42, 1]; applyEx('L', l);
         const h = holds(tp);
         fork.group.visible = h === 'fork'; torch.group.visible = h === 'torch';
         if (h === 'fork') { setProp(fork, propForHand(FORK_GRIP, r)); const a = ringAt(tp); fork.setVibrate(a * (Math.round(tp * POSES) % 2 ? 1 : -1)); }
