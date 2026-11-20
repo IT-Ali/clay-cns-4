@@ -61,7 +61,7 @@ ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 90ch; }
   <h1>Cranial nerves VIII to XII: storyboard</h1>
   <p>Twelve beats, 92 s. Every still is rendered with the STAGE kit from the real scene (shared v5 patient, set and hands, the same cameras and the same solved contact poses the animation uses), at ${samples} samples, ${size[0]}×${size[1]}, the captioned version. Holds (still, no caption, for the speech added later) are listed under each beat.</p>
 </header>
-${notes.changes && notes.changes.length ? `<section><h2>Changed in this round (your review 2)</h2><ul>${notes.changes.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></section>` : ''}
+${notes.changes && notes.changes.length ? `<section><h2>Changed in this round (your review 3, and the build)</h2><ul>${notes.changes.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></section>` : ''}
 <section>
   <h2>The beats</h2>
   <div class="grid">
@@ -71,6 +71,7 @@ ${BEATS.map((b) => `    <article class="panel${b.n === 10 ? ' key' : ''}"><img s
       <dl><dt>Changes</dt><dd>${esc(b.change)}</dd><dt>Camera</dt><dd>${esc(b.camera)}</dd><dt>Sound</dt><dd>${esc(b.sound)}</dd></dl></div></article>`).join('\n')}
   </div>
 </section>
+${fs.existsSync(path.join(SB, 'img', 'story_vs_anim.jpg')) ? `<section><h2>Storyboard vs animation</h2><p style="margin:0;color:var(--muted);max-width:80ch">Beats 2, 4, 7, 8 and 10: the storyboard panel, the animation at the same moment rendered again from the same cameras and poses (the mean pixel difference is only grain and JPEG), and the animation at the middle of the beat's hold.</p><div class="panel"><img style="aspect-ratio:auto" src="${img('story_vs_anim')}" alt="Storyboard panels next to animation frames"></div></section>` : ''}
 <section>
   <h2>Review panels (not in the video)</h2>
 ${groups.map((g) => `  <h3>${esc(g)}</h3>

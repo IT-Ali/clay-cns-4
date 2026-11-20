@@ -28,14 +28,13 @@
   "The middle of the forehead for Weber is found on his skin halfway between the hairline and the eyebrows (the kit's 'forehead' landmark sits at the hairline)."
  ],
  "open": [
-  "SCM crops (d-scmR/L): the neck is now filmed from the side of the working muscle, rest vs turning. The sternocleidomastoid standing out is the kit's own effect (shared/patient-neuro.js, about 9 mm at a 60-degree turn; here the turn is 22 degrees against the hand), so the change is subtle. I can make it stronger in this part's own code, as with the larynx, if you want it to read more clearly.",
-  "Shrug: the examiner's right thumb touches 0.07 mm into the skin (every palm and finger is at 0.5 mm). It does not show; I will tidy it in the animation round.",
-  "Water (beat 6): his palm sits 1.7 mm off the glass (fingers and thumb at 0.5 mm): a flat palm cannot lie fully on a 10 cm round glass.",
   "Between contacts the hands travel relaxed, but on long moves the fingers still open a little mid-way (seen in the animation, not in these stills); I will tighten that in the animation round."
  ],
  "changes": [
   "Cough (beat 5): the mouth interior is narrower (cavity, soft palate, teeth rows and gums stop inside the mouth corners), so nothing shows through the cheek; checked from both 3/4 sides with the mouth open (cough, 'Ah', tongue out) and from every open-mouth beat's own camera.",
   "Rinne, left ear (beat 2; b-airL2): the examiner walks round to his LEFT side; the hand comes in from his left, below and behind the left ear, the forearm from his left, nothing over his face; then back to his right for Weber.",
-  "Shrug (beat 7; d-shrug2): during the shrug the camera moves to the front at shoulder level (about 2.3 s), so the shoulders' rise toward the ears and the shorter-looking neck read; d-shrug2 uses that same camera and prints the measured rise."
+  "Shrug (beat 7; d-shrug2): during the shrug the camera moves to the front at shoulder level (about 2.3 s), so the shoulders' rise toward the ears and the shorter-looking neck read; d-shrug2 uses that same camera and prints the measured rise.",
+  "Contacts: the shrug thumbs are now 0.5 mm off the skin (the right one was 0.07 mm into it), and his palm on the glass is 0.76 mm (was 1.73 mm): the fingers and thumb open a little so the palm itself comes down. Every contact is now inside 0 to 1.5 mm.",
+  "Build: story_vs_anim.png (beats 2, 4, 7, 8, 10: the panel, the animation at the same time rendered again from the same data, and the animation at the middle of the hold), low-sample previews of beat 10, the whole part and every beat, and the first/last frame check."
  ]
 }

@@ -10,21 +10,26 @@
   before/after crops; own larynx prominence in the swallow beat; shrug palms on the trapezius ridge + rest/shrug pair;
   Rinne thumb-and-index grip, fingers away from the ear (searched, ear clearance 8 mm) + b-airL2; small torch for 'Ah';
   SCM crops. All 34 panels re-rendered; waiting for the user's review (story_vs_anim and previews only after approval).
-- The whole animation already runs end to end in `cns4/cns4-style.js` (it is the storyboard's scene: cameras CAM,
-  states ST, contacts CONTACTS). After approval: polish beats, then story_vs_anim.png, previews, final checks.
+- Round 4 (storyboard round 3 APPROVED + 3 fixes, then the build):
+  1. cough: the mouth interior is narrower (nothing shows through the cheek; checked every open-mouth beat from its camera);
+  2. Rinne left: the examiner walks round to his LEFT side (SLEEVE_DIR switched while `left` is set in the R hand
+     states), forearm from his left, below/behind the ear, nothing over the face, back to his right for Weber;
+  3. shrug: front camera at shoulder level during the shrug (`shrugLevel`), measured rise 2.8 cm each side, printed in d-shrug2.
+  Also: palm contacts now swing the thumb back out if the last palm settle put it into the skin (shrug thumb was -0.07 mm).
+  Build: story_vs_anim.png (beats 2, 4, 7, 8, 10), low-sample previews (software, 1 sample, 640x360) in `previews/`,
+  first/last frame identity check, render.mjs + README for the PC. STOP for the user's review after this round.
 
-## Left to do (after storyboard approval)
-1. Apply the user's storyboard changes.
-2. story_vs_anim.png: animation frame at the middle of each hold vs its panel, beats 2, 4, 7, 8, 10 (tools/frames.mjs).
-3. Low-sample previews here (software WebGL): beat 10 first, then the full part and each beat
-   (`node render.mjs --preview --software`), check first and last frames are pixel-identical.
-4. Stop for review. Final MP4s are rendered on the user's PC with `npm start` (no GPU here).
+## Left to do
+- Wait for the user's review of the previews. Final MP4s are rendered on the user's PC with `npm start` (no GPU here).
 
 ## Commands (this cloud machine has no GPU: software WebGL, slow)
 - build + a few frames: `node tools/frames.mjs <outDir> 960 540 1 <t1> <t2> ...`
 - one still with a page script: `node tools/shot.mjs out.png "<js>" 800 450 2 <t>`
 - storyboard stills (resumable; skips existing images): `sh tools/sb-loop.sh` or `node tools/storyboard.mjs 16 960 540 [--only=id,id]`
 - storyboard page: `node tools/storyboard-html.mjs` (reads storyboard/notes.json for checks and assumptions)
+- previews: `node render.mjs --preview --software --samples 1 --w 640 --h 360 [--beat N]` (resumable; out/preview/),
+  then copy the MP4s to `previews/`
+- story_vs_anim: `node tools/story-vs-anim.mjs 16`
 - page build takes about 2.5 min in software WebGL (the contact solver); one 960x540 sample about 10 s.
 
 ## Notes

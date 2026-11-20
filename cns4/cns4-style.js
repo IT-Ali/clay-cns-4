@@ -430,6 +430,8 @@
           // a few rounds: fingers onto the skin, the thumb beside them, the palm itself back down to 0.5 mm
           for (let k = 0; k < 3; k++) { fingers(); if (lo.thumb !== false) C4.thumbTo(hand, pose, S0, { lo: -0.9, hi: 1.0 }); palmDown(); }
           fingers();
+          // the palm's last settle can bring the thumb onto the skin: swing it back out to 0.5 mm (never into the skin)
+          if (lo.thumb !== false && C4.gap(C4.parts(hand, 'thumb'), S0).gap < C4.TARGET) C4.thumbTo(hand, pose, S0, { lo: -1.8, hi: 1.0 });
         }
         hand.pose(pose); hand.group.updateMatrixWorld(true);
         return { st: { wrist: hand.group.position.clone(), quat, pose, back: back.clone().normalize() }, S0 };
@@ -516,8 +518,15 @@
           const w1 = pH.group.position.clone();
           C4.settle((d) => { pH.group.position.copy(w1).addScaledVector(n, d); pH.group.updateMatrixWorld(true); }, () => C4.gap(C4.parts(pH, 'palm'), S0).gap);
         }
-        for (const f of ['index', 'middle', 'ring', 'little']) C4.curlTo(pH, pose, f, S0, { lo: -0.3, hi: 1.9 });
-        C4.thumbTo(pH, pose, S0, { lo: -0.8, hi: 1.3 });
+        // more rounds: the fingers and thumb open a little so the palm itself can come down to 0.5 mm on the round glass
+        for (let k = 0; k < 4; k++) {
+          for (const f of ['index', 'middle', 'ring', 'little']) C4.curlTo(pH, pose, f, S0, { lo: -0.6, hi: 1.9 });
+          C4.thumbTo(pH, pose, S0, { lo: -1.2, hi: 1.3 });
+          const w1 = pH.group.position.clone();
+          C4.settle((d) => { pH.group.position.copy(w1).addScaledVector(n, d); pH.group.updateMatrixWorld(true); }, () => C4.gap(C4.parts(pH, 'palm'), S0).gap);
+        }
+        for (const f of ['index', 'middle', 'ring', 'little']) C4.curlTo(pH, pose, f, S0, { lo: -0.6, hi: 1.9 });
+        C4.thumbTo(pH, pose, S0, { lo: -1.2, hi: 1.3 });
         { const w2 = pH.group.position.clone(); C4.settle((d) => { pH.group.position.copy(w2).addScaledVector(n, d); pH.group.updateMatrixWorld(true); }, () => Math.min(C4.gap(C4.parts(pH, 'palm'), S0).gap, C4.gap(C4.parts(pH, 'hand').concat(C4.parts(pH, 'fingers'), C4.parts(pH, 'thumb')), S0).gap)); }
         pH.pose(pose); pH.group.updateMatrixWorld(true);
         for (const part of ['palm', 'index', 'middle', 'ring', 'little', 'thumb']) record(`Glass: his left ${part} on the glass`, C4.parts(pH, part), S0, { group: 'f', part });

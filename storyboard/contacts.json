@@ -26,7 +26,7 @@
  },
  {
   "name": "Shrug start: examiner R palm on his right shoulder",
-  "gapMM": 0.51,
+  "gapMM": 0.86,
   "clearance": false
  },
  {
@@ -51,12 +51,12 @@
  },
  {
   "name": "Shrug start: examiner R thumb on his right shoulder",
-  "gapMM": -0.07,
+  "gapMM": 0.5,
   "clearance": false
  },
  {
   "name": "Shrug start: examiner L palm on his left shoulder",
-  "gapMM": 0.5,
+  "gapMM": 0.8,
   "clearance": false
  },
  {
@@ -81,12 +81,12 @@
  },
  {
   "name": "Shrug start: examiner L thumb on his left shoulder",
-  "gapMM": 0.01,
+  "gapMM": 0.5,
   "clearance": false
  },
  {
   "name": "Shrug up: examiner R palm on his right shoulder",
-  "gapMM": 0.51,
+  "gapMM": 0.83,
   "clearance": false
  },
  {
@@ -111,12 +111,12 @@
  },
  {
   "name": "Shrug up: examiner R thumb on his right shoulder",
-  "gapMM": -0.05,
+  "gapMM": 0.5,
   "clearance": false
  },
  {
   "name": "Shrug up: examiner L palm on his left shoulder",
-  "gapMM": 0.51,
+  "gapMM": 0.72,
   "clearance": false
  },
  {
@@ -141,7 +141,7 @@
  },
  {
   "name": "Shrug up: examiner L thumb on his left shoulder",
-  "gapMM": 0.18,
+  "gapMM": 0.5,
   "clearance": false
  },
  {
@@ -216,7 +216,7 @@
  },
  {
   "name": "Glass: his left palm on the glass",
-  "gapMM": 1.73,
+  "gapMM": 0.76,
   "clearance": false
  },
  {

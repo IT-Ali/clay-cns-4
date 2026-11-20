@@ -1,0 +1,37 @@
+[
+ {
+  "beat": 2,
+  "panelT": 9.9,
+  "midHold": 6.55,
+  "meanDiff": 1.927,
+  "pctOver12": 1.022
+ },
+ {
+  "beat": 4,
+  "panelT": 32.5,
+  "midHold": 28.55,
+  "meanDiff": 2.104,
+  "pctOver12": 0.406
+ },
+ {
+  "beat": 7,
+  "panelT": 55.8,
+  "midHold": 52.55,
+  "meanDiff": 1.745,
+  "pctOver12": 0.58
+ },
+ {
+  "beat": 8,
+  "panelT": 63.5,
+  "midHold": 60.55,
+  "meanDiff": 1.757,
+  "pctOver12": 0.725
+ },
+ {
+  "beat": 10,
+  "panelT": 79,
+  "midHold": 76.35,
+  "meanDiff": 1.968,
+  "pctOver12": 0.294
+ }
+]
