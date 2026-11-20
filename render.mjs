@@ -40,7 +40,8 @@ if (opt('beat', '')) { const bt = info.beats.find((b) => b.n === +opt('beat')); 
 
 // 1. the frames (skipping those already rendered)
 const todo = []; for (let i = f0; i <= Math.min(f1, NF - 1); i++) if (!fs.existsSync(path.join(FR.clean, pad(i) + '.png')) || !fs.existsSync(path.join(FR.captions, pad(i) + '.png'))) todo.push(i);
-console.log(`${NF - todo.length} of ${NF} frames already on disk, ${todo.length} to render`);
+const NR = Math.min(f1, NF - 1) - f0 + 1;
+console.log(`frames ${f0}-${f0 + NR - 1}: ${NR - todo.length} of ${NR} already on disk, ${todo.length} to render`);
 const write = (file, dataUrl) => { const tmp = file + '.part'; fs.writeFileSync(tmp, Buffer.from(dataUrl.split(',')[1], 'base64')); fs.renameSync(tmp, file); };
 let done = 0; const t1 = Date.now();
 for (const i of todo) {
