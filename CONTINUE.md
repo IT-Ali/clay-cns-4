@@ -16,6 +16,9 @@
      states), forearm from his left, below/behind the ear, nothing over the face, back to his right for Weber;
   3. shrug: front camera at shoulder level during the shrug (`shrugLevel`), measured rise 2.8 cm each side, printed in d-shrug2.
   Also: palm contacts now swing the thumb back out if the last palm settle put it into the skin (shrug thumb was -0.07 mm).
+  Preview review fixes: strikes below the frame (ST.L.strike lowered 2.0, strikeW moved), camera arc via CAM.rinneMid,
+  left mastoid search with line-of-sight (sightPen), forearm not end-on (endOnPen), forearm from below (naturalBack bone L),
+  wrist limit; right glove leaves the jaw low and fast (beat 8). Glass palm 0.76 mm (more grip rounds).
   Build: story_vs_anim.png (beats 2, 4, 7, 8, 10), low-sample previews (software, 1 sample, 640x360) in `previews/`,
   first/last frame identity check, render.mjs + README for the PC. STOP for the user's review after this round.
 
